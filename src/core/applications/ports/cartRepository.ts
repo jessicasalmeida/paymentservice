@@ -1,11 +1,15 @@
-import {Carrinho} from "../../domain/carrinho";
+import {Cart} from "../../domain/cart";
+import {User} from "../../domain/user";
+import {Produto} from "../../domain/produto";
+import {Order} from "../../domain/order";
 
 export interface CartRepository {
-    getProductsByCategory(category: string): Promise<Produto>;
-    personalizeItens(personalize: string): Promise<Produto>;
-    resumeCart(product: Produto) : Promise<Produto>;
-    closeCart(product: Produto) : Promise<Produto>;
-    payCart(id: string, product: Produto): Promise<Produto>;
-    updateCartToOrder(id: string): Promise<Produto>;
-    getProducts(): Promise<Produto[]>;
+    createCart(): Promise<Cart>;
+    addUser(idCart: string, idUser : string) : Promise<Cart>;
+    addProduct(idCart: string, idProduct: string): Promise<Cart>;
+    personalizeItens(idCart: string, observacoes: String): Promise<Cart>;
+    resumeCart(id: string) : Promise<Cart>;
+    closeCart(id: string) : Promise<Cart>;
+    payCart(id: string): Promise<Cart>;
+    sendToKitchen(id: string): Promise<Order>;
 }
