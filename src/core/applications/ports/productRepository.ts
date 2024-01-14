@@ -5,8 +5,8 @@ export interface ProductRepository {
     getProductById(id: string): Promise<Produto>;
     getProductByCategory(id: string): Promise<Produto>;
     createProduct(product: Produto) : Promise<Produto>;
-    deleteProduct(product: Produto) : Promise<Produto>;
-    updateProduct(id: string, product: Produto): Promise<Produto>;
-    deactivateProduct(id: string): Promise<Produto>;
-    getProducts(): Promise<Produto[]>;
+    deleteProductById(id: String): Promise<Produto[]>;
+    updateProductById(id: string, product: Produto): Promise<Produto>;
+    deactivateProductById(id: string): Promise<Produto>;
+    getActiveProducts(): Promise<Produto[]>;
 }
