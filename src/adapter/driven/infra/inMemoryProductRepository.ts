@@ -4,20 +4,20 @@ import {ProductRepository} from "../../../core/applications/ports/productReposit
 export class InMemoryProductRepository implements ProductRepository {
 
     private readonly produtos: Produto[] = [
-        { id: "1", name: "Big Mac", opcoes: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], categoria: "Lanche", preco: "10", status: true},
-        { id: "2", name: "Big Tasty", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], categoria: "Lanche", preco: "10", status: true},
-        { id: "3", name: "Quarteirao", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], categoria: "Lanche", preco: "10", status: true},
-        { id: "4", name: "Coca", opcoes: ['Gelo'], categoria: "Bebida", preco: "10", status: true},
-        { id: "5", name: "Agua", opcoes: ['Gelo'], categoria: "Bebida", preco: "10", status: true},
-        { id: "6", name: "Suco", opcoes: ['Gelo', 'Acucar'], categoria: "Bebida", preco: "10", status: true},
-        { id: "7", name: "Pudim", opcoes: [], categoria: "Sobremesa", preco: "10", status: true},
-        { id: "8", name: "Torta de Maça", opcoes: [], categoria: "Sobremesa", preco: "10", status: true},
-        { id: "9", name: "Sorvete de Baunilha", opcoes: [], categoria: "Sobremesa", preco: "10", status: true},
-        { id: "10", name: "Sorvete de Chocolate", opcoes: [], categoria: "Sobremesa", preco: "10", status: false},
-        { id: "11", name: "Combo Big Mac + Bebida + Acompanhamento", opcoes: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], categoria: "Combo", preco: "30", status: true},
-        { id: "12", name: "Combo Big Tasty + Bebida + Acompanhamento", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], categoria: "Combo", preco: "30", status: true},
-        { id: "12", name: "Combo Quarteirao+ Bebida + Acompanhamento", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], categoria: "Combo", preco: "30", status: true},
-        { id: "13", name: "Batata", opcoes: [], categoria: "Acompanhamento", preco: "10", status: true},
+        { id: "1", name: "Big Mac", opcoes: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], categoria: "lanche", preco: 10, status: true},
+        { id: "2", name: "Big Tasty", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], categoria: "lanche", preco: 10, status: true},
+        { id: "3", name: "Quarteirao", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], categoria: "lanche", preco: 10, status: true},
+        { id: "4", name: "Coca", opcoes: ['Gelo'], categoria: "bebida", preco: 10, status: true},
+        { id: "5", name: "Agua", opcoes: ['Gelo'], categoria: "bebida", preco: 10, status: true},
+        { id: "6", name: "Suco", opcoes: ['Gelo', 'Acucar'], categoria: "bebida", preco: 10, status: true},
+        { id: "7", name: "Pudim", opcoes: [], categoria: "sobremesa", preco: 10, status: true},
+        { id: "8", name: "Torta de Maça", opcoes: [], categoria: "sobremesa", preco: 10, status: true},
+        { id: "9", name: "Sorvete de Baunilha", opcoes: [], categoria: "sobremesa", preco: 10, status: true},
+        { id: "10", name: "Sorvete de Chocolate", opcoes: [], categoria: "sobremesa", preco: 10, status: false},
+        { id: "11", name: "Combo Big Mac + Bebida + Acompanhamento", opcoes: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], categoria: "combo", preco: 30, status: true},
+        { id: "12", name: "Combo Big Tasty + Bebida + Acompanhamento", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], categoria: "combo", preco: 30, status: true},
+        { id: "12", name: "Combo Quarteirao+ Bebida + Acompanhamento", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], categoria: "combo", preco: 30, status: true},
+        { id: "13", name: "Batata", opcoes: [], categoria: "Acompanhamento", preco: 10, status: true},
 
     ];
     async deleteProductById(id: String): Promise<Produto[]> {
@@ -30,15 +30,19 @@ export class InMemoryProductRepository implements ProductRepository {
         this.produtos.splice(index, 1)
         return this.produtos;
     }
-    async updateProductById(id: string, product: Produto): Promise<Produto> {
+    async updateProductById(id: string, newProduct: Produto): Promise<Produto> {
         const produto = this.produtos.find((u) => u.id === id);
         if(!produto)
         {
             throw new Error(`Produto não encontrado para atualização. ID: ${id}`);
         }
         const index = this.produtos.indexOf(produto);
-        this.produtos.splice(index, 1);
-        this.produtos.push(product);
+        produto.name = newProduct.name;
+        produto.opcoes = newProduct.opcoes;
+        produto.categoria = newProduct.categoria;
+        produto.preco = newProduct.preco;
+        produto.status = newProduct.status;
+        this.produtos[index] = produto;
         return produto;
     }
     async deactivateProductById(id: string): Promise<Produto> {
@@ -77,6 +81,7 @@ export class InMemoryProductRepository implements ProductRepository {
     }
 
     async getProductByCategory(categoria: string): Promise<Produto> {
+        categoria = categoria.toLowerCase();
         const produto = this.produtos.find((u) => u.categoria === categoria);
         if (!produto) {
             throw new Error(`Produto with category ${categoria} not found`);

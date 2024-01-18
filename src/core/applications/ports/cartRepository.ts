@@ -7,9 +7,10 @@ export interface CartRepository {
     createCart(): Promise<Cart>;
     addUser(idCart: string, idUser : string) : Promise<Cart>;
     addProduct(idCart: string, idProduct: string): Promise<Cart>;
-    personalizeItens(idCart: string, observacoes: String): Promise<Cart>;
+    personalizeItens(idCart: string, idProduct: string, observacoes: Array<string>): Promise<Cart>;
     resumeCart(id: string) : Promise<Cart>;
     closeCart(id: string) : Promise<Cart>;
+    cancelCart(id: string) : Promise<Cart>;
     payCart(id: string): Promise<Cart>;
     sendToKitchen(id: string): Promise<Order>;
 }

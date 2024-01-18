@@ -14,8 +14,8 @@ export class CartService {
     async addProduct(idCart: string, idProduct: string): Promise<Cart> {
         return this.cartRepository.addProduct(idCart, idProduct);
     }
-    async personalizeItens(idCart: string, observacoes: String): Promise<Cart> {
-        return this.cartRepository.personalizeItens(idCart, observacoes);
+    async personalizeItens(idCart: string, idProduct: string, observacoes: Array<string>): Promise<Cart> {
+        return this.cartRepository.personalizeItens(idCart, idProduct,  observacoes);
     }
     async resumeCart(id: string): Promise<Cart> {
         return this.cartRepository.resumeCart(id);
@@ -28,6 +28,10 @@ export class CartService {
     }
     async sendToKitchen(id: string): Promise<Order>{
         return this.cartRepository.sendToKitchen(id);
+    }
+
+    async cancelCart(id: string): Promise<Order>{
+        return this.cartRepository.cancelCart(id);
     }
 
 

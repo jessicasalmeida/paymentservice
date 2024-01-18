@@ -1,4 +1,4 @@
-import express, {Router} from "express";
+import express from "express";
 import { UserController } from "./userController";
 import { InMemoryUserRepository } from "../driven/infra/inMemoryUserRepository";
 import { UserService } from "../../core/applications/services/userService"
@@ -26,7 +26,10 @@ const cartService = new CartService(cartRepository);
 const cartController = new CartController(cartService);
 
 const app = express();
-var bodyParser = require('body-parser');
+
+app.use(express.json());
+app.use(morgan("tiny"));
+app.use(express.static("public"));
 
 app.get('/users/:id', userController.getUserById.bind(userController));
 
@@ -48,10 +51,8 @@ app.get('/cart/:id', cartController.resumeCart.bind(cartController));
 app.post('/cart/close/:id', cartController.closeCart.bind(cartController));
 app.post('/cart/pay/:id', cartController.payCart.bind(cartController));
 app.post('/cart/kitchen/:id', cartController.sendToKitchen.bind(cartController));
+app.post('/cart/cancel/:id', cartController.cancelCart.bind(cartController));
 
 
-
-app.use(express.json());
-app.use(morgan("tiny"));
-app.use(express.static("public"));
+//
 app.listen(8000, () => console.log('Server is listening on port 8000'));

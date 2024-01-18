@@ -12,29 +12,30 @@ export class CartController {
     }
 
     async addUser(req: Request, res: Response) {
-        const idCart = req.params.cart;
-        const idUser = req.params.user;
+        const idCart = req.params.id;
+        const idUser = req.query.user as string;
         const cart = await this.cartService.addUser(idCart, idUser);
         res.status(200).json(cart);
     }
 
     async addProduct(req: Request, res: Response) {
-        const idCart = req.params.cart;
-        const idProduct = req.params.user;
+        const idCart = req.params.id;
+        const idProduct = req.query.product as string;
         const cart = await this.cartService.addProduct(idCart, idProduct);
         res.status(200).json(cart);
     }
 
     async personalizeItens(req: Request, res: Response) {
         const id = req.params.id;
-        const observacoes = req.params.observacoes;
-        const cart =  await this.cartService.personalizeItens(id, observacoes);
+        const product = req.query.product as string
+        const observacoes = req.query.observacoes as Array<string>;
+        const cart =  await this.cartService.personalizeItens(id, product, observacoes);
         res.status(200).json(cart);
     }
 
     async resumeCart(req: Request, res: Response) {
         const id = req.params.id;
-        const cart =  await this.cartService.resumeCart(id);
+        const cart = await this.cartService.resumeCart(id);
         res.status(200).json(cart);
     }
 
@@ -52,7 +53,13 @@ export class CartController {
 
     async sendToKitchen(req: Request, res: Response) {
         const id = req.params.id;
-        const cart =  await this.cartService.payCart(id);
+        const cart =  await this.cartService.sendToKitchen(id);
+        res.status(200).json(cart);
+    }
+
+    async cancelCart(req: Request, res: Response) {
+        const id = req.params.id;
+        const cart =  await this.cartService.cancelCart(id);
         res.status(200).json(cart);
     }
 }

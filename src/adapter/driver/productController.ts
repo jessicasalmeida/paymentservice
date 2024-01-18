@@ -19,7 +19,7 @@ export class ProductController {
         res.status(200).json(produto);
     }
 
-    async createProduct(req: Request<ParamsDictionary, any, Produto>, res: Response) {
+    async createProduct(req: Request, res: Response) {
         const newProduct = req.body;
         const product =  await this.productService.createProduct(newProduct);
         res.status(200).json(product);
