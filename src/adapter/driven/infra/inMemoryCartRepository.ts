@@ -8,8 +8,8 @@ export class InMemoryCartRepository implements CartRepository {
 
     private readonly users: User[] = [{ id: '1', name: 'John Doe', email: 'john.doe@example.com' }];
     private readonly produtos: Produto[] = [
-        { id: "1", name: "Big Mac", opcoes: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], categoria: "Lanche", preco: 10, status: true},
-        { id: "2", name: "Big Tasty", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], categoria: "Lanche", preco: 10, status: true},
+        { id: "1", name: "Big Mac", options: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], category: "Lanche", price: 10, timeToPrepare: 15, status: true},
+        { id: "2", name: "Big Tasty", options: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], category: "Lanche", price: 10,timeToPrepare: 15, status: true},
       ];
 
     private readonly carts: Cart[] = [
@@ -32,19 +32,8 @@ export class InMemoryCartRepository implements CartRepository {
         }
     ];
 
-    async createCart(): Promise<Cart> {
-        const id = (this.carts.length+1).toString();
-        const emptyUser = {} as User;
-        const emptyProdutos =  [] as Produto[];
-
-        const newCart: Cart = {
-            id: id,
-            user: emptyUser,
-            produtosList: emptyProdutos,
-            valorTotal: 0,
-            status: "OPEN",
-            pago: false
-        }
+    async createCart(newCart:Cart): Promise<Cart> {
+        newCart.id = (this.carts.length+1).toString();
         this.carts.push(newCart);
         return newCart;
     }
@@ -62,7 +51,7 @@ export class InMemoryCartRepository implements CartRepository {
         const index = this.carts.indexOf(cart);
         var newProducts = cart.produtosList;
         newProducts.push(this.findProductById(idProduct));
-        let valorTotal = newProducts.reduce((sum, p) => sum + p.preco, 0);
+        let valorTotal = newProducts.reduce((sum, p) => sum + p.price, 0);
 
         cart.produtosList = newProducts;
         cart.valorTotal = valorTotal;
@@ -71,6 +60,7 @@ export class InMemoryCartRepository implements CartRepository {
         return cart;
 
     }
+
 
     async personalizeItens(idCart: string, idProduct: string, observacoes: Array<string>): Promise<Cart> {
         const cart = this.findCartById(idCart);
@@ -82,7 +72,7 @@ export class InMemoryCartRepository implements CartRepository {
         if(listProducts.length == 0){
             throw new Error("Product with id ${idProduct} not found in cart {idCart} ")
         }
-        product.opcoes = observacoes;
+        product.options = observacoes;
         listProducts[indexProduct] = product;
 
         this.carts[index]=cart;
@@ -109,7 +99,7 @@ export class InMemoryCartRepository implements CartRepository {
         return cart;
     }
 
-    async sendToKitchen(id: string): Promise<Order> {
+    async sendToKitchen(id: string): Promise<Cart> {
         const cart = this.findCartById(id);
         const index = this.carts.indexOf(cart);
         cart.status = "SENDED";

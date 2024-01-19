@@ -9,4 +9,5 @@ export interface ProductRepository {
     updateProductById(id: string, product: Produto): Promise<Produto>;
     deactivateProductById(id: string): Promise<Produto>;
     getActiveProducts(): Promise<Produto[]>;
+    getProducts(): Promise<Produto[]>;
 }

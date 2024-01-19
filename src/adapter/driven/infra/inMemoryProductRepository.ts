@@ -4,20 +4,21 @@ import {ProductRepository} from "../../../core/applications/ports/productReposit
 export class InMemoryProductRepository implements ProductRepository {
 
     private readonly produtos: Produto[] = [
-        { id: "1", name: "Big Mac", opcoes: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], categoria: "lanche", preco: 10, status: true},
-        { id: "2", name: "Big Tasty", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], categoria: "lanche", preco: 10, status: true},
-        { id: "3", name: "Quarteirao", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], categoria: "lanche", preco: 10, status: true},
-        { id: "4", name: "Coca", opcoes: ['Gelo'], categoria: "bebida", preco: 10, status: true},
-        { id: "5", name: "Agua", opcoes: ['Gelo'], categoria: "bebida", preco: 10, status: true},
-        { id: "6", name: "Suco", opcoes: ['Gelo', 'Acucar'], categoria: "bebida", preco: 10, status: true},
-        { id: "7", name: "Pudim", opcoes: [], categoria: "sobremesa", preco: 10, status: true},
-        { id: "8", name: "Torta de Maça", opcoes: [], categoria: "sobremesa", preco: 10, status: true},
-        { id: "9", name: "Sorvete de Baunilha", opcoes: [], categoria: "sobremesa", preco: 10, status: true},
-        { id: "10", name: "Sorvete de Chocolate", opcoes: [], categoria: "sobremesa", preco: 10, status: false},
-        { id: "11", name: "Combo Big Mac + Bebida + Acompanhamento", opcoes: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], categoria: "combo", preco: 30, status: true},
-        { id: "12", name: "Combo Big Tasty + Bebida + Acompanhamento", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], categoria: "combo", preco: 30, status: true},
-        { id: "12", name: "Combo Quarteirao+ Bebida + Acompanhamento", opcoes: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], categoria: "combo", preco: 30, status: true},
-        { id: "13", name: "Batata", opcoes: [], categoria: "Acompanhamento", preco: 10, status: true},
+        { id: "1", name: "Big Mac", options: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], category: "lanche", price: 10,  timeToPrepare: 15,  status: true},
+        { id: "2", name: "Big Tasty", options: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], category: "lanche", price: 10,  timeToPrepare: 15,  status: true},
+        { id: "3", name: "Quarteirao", options: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], category: "lanche", price: 10, timeToPrepare: 15, status: true},
+        { id: "4", name: "Coca", options: ['Gelo'], category: "bebida", price: 10,  timeToPrepare: 5,  status: true},
+        { id: "5", name: "Agua", options: ['Gelo'], category: "bebida", price: 10,  timeToPrepare: 5, status: true},
+        { id: "6", name: "Suco", options: ['Gelo', 'Acucar'], category: "bebida",  timeToPrepare: 5,  price: 10, status: true},
+        { id: "7", name: "Pudim", options: [], category: "sobremesa", price: 10,  timeToPrepare: 2, status: true},
+        { id: "8", name: "Torta de Maça", options: [], category: "sobremesa",  price: 10, timeToPrepare: 2, status: true},
+        { id: "9", name: "Sorvete de Baunilha", options: [], category: "sobremesa", price: 10, timeToPrepare: 2, status: true},
+        { id: "8", name: "Torta de Maça", options: [], category: "sobremesa", price: 10, timeToPrepare: 2, status: true},
+        { id: "10", name: "Sorvete de Chocolate", options: [], category: "sobremesa", price: 10, timeToPrepare: 2, status: false},
+        { id: "11", name: "Combo Big Mac + Bebida + Acompanhamento", options: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], category: "combo", price: 30,  timeToPrepare: 15,  status: true},
+        { id: "12", name: "Combo Big Tasty + Bebida + Acompanhamento", options: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], category: "combo", price: 30,  timeToPrepare: 15,  status: true},
+        { id: "12", name: "Combo Quarteirao+ Bebida + Acompanhamento", options: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], category: "combo", price: 30,  timeToPrepare: 15, status: true},
+        { id: "13", name: "Batata", options: [], category: "Acompanhamento", price: 10,timeToPrepare: 15, status: true},
 
     ];
     async deleteProductById(id: String): Promise<Produto[]> {
@@ -38,9 +39,9 @@ export class InMemoryProductRepository implements ProductRepository {
         }
         const index = this.produtos.indexOf(produto);
         produto.name = newProduct.name;
-        produto.opcoes = newProduct.opcoes;
-        produto.categoria = newProduct.categoria;
-        produto.preco = newProduct.preco;
+        produto.options = newProduct.options;
+        produto.category = newProduct.category;
+        produto.price = newProduct.price;
         produto.status = newProduct.status;
         this.produtos[index] = produto;
         return produto;
@@ -81,12 +82,15 @@ export class InMemoryProductRepository implements ProductRepository {
     }
 
     async getProductByCategory(categoria: string): Promise<Produto> {
-        categoria = categoria.toLowerCase();
-        const produto = this.produtos.find((u) => u.categoria === categoria);
+        const produto = this.produtos.find((u) => u.category === categoria);
         if (!produto) {
             throw new Error(`Produto with category ${categoria} not found`);
         }
         return produto;
+    }
+
+    async getProducts(): Promise<Produto[]> {
+        return this.produtos;
     }
 
     async createProduct(productBody: Produto): Promise<Produto> {

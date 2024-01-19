@@ -23,9 +23,14 @@ export class OrderController {
         res.status(200).json(order);
     }
 
-    async sendNotification(req: Request, res: Response) {
+    async sendNotificationEstimatedTime(req: Request, res: Response) {
         const id = req.params.id;
-        const order = await this.orderService.sendNotification(id);
+        const order = await this.orderService.sendNotificationEstimatedTime(id);
+        res.status(200).json(order);
+    }
+    async sendNotificationDelivery(req: Request, res: Response) {
+        const id = req.params.id;
+        const order = await this.orderService.sendNotificationDelivery(id);
         res.status(200).json(order);
     }
 
@@ -44,6 +49,12 @@ export class OrderController {
     async updateStatusToClosed(req: Request, res: Response) {
         const id = req.params.id;
         const order = await this.orderService.updateStatusToClosed(id);
+        res.status(200).json(order);
+    }
+
+    async getAllActiveOrders(req: Request, res: Response) {
+        const id = req.params.id;
+        const order = await this.orderService.getAllActiveOrders();
         res.status(200).json(order);
     }
 }

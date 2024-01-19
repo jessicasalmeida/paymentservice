@@ -61,14 +61,16 @@ app.post('/cart/kitchen/:id', cartController.sendToKitchen.bind(cartController))
 app.post('/cart/cancel/:id', cartController.cancelCart.bind(cartController));
 
 //order
-app.post('/order/receive/:id', orderController.receiveOrder.bind(cartController));
-app.post('/order/prepare/:id', orderController.prepareOrder.bind(cartController));
-app.post('/order/estimate/:id', orderController.estimateDelivery.bind(cartController));
-app.post('/order/notification/:id', orderController.sendNotification.bind(cartController));
-app.post('/order/update/ready/:id', orderController.updateStatusToReady.bind(cartController));
-app.post('/order/update/delivered/:id', orderController.updateStatusToDelivered.bind(cartController));
-app.post('/order/update/closed:id', orderController.updateStatusToClosed.bind(cartController));
 
+app.post('/order/receive/:id', orderController.receiveOrder.bind(orderController));
+app.post('/order/prepare/:id', orderController.prepareOrder.bind(orderController));
+app.get('/order/estimate/:id', orderController.estimateDelivery.bind(orderController));
+app.get('/order/notification/estimatedtime/:id', orderController.sendNotificationEstimatedTime.bind(orderController));
+app.get('/order/notification/delivery/:id', orderController.sendNotificationDelivery.bind(orderController));
+app.post('/order/update/ready/:id', orderController.updateStatusToReady.bind(orderController));
+app.post('/order/update/delivered/:id', orderController.updateStatusToDelivered.bind(orderController));
+app.post('/order/update/closed/:id', orderController.updateStatusToClosed.bind(orderController));
+app.get('/order/', orderController.getAllActiveOrders.bind(orderController));
 
 //
 app.listen(8000, () => console.log('Server is listening on port 8000'));

@@ -14,12 +14,16 @@ export class OrderService {
         return this.orderRepository.prepareOrder(idOrder);
     }
 
-    async estimateDelivery(idOrder: string): Promise<Order> {
+    async estimateDelivery(idOrder: string): Promise<string> {
         return this.orderRepository.estimateDelivery(idOrder);
     }
 
-    async sendNotification(idOrder: string): Promise<Order> {
-        return this.orderRepository.sendNotification(idOrder);
+    async sendNotificationEstimatedTime(idOrder: string): Promise<string> {
+        return this.orderRepository.sendNotificationEstimatedTime(idOrder);
+    }
+
+    async sendNotificationDelivery(idOrder: string): Promise<string> {
+        return this.orderRepository.sendNotificationDelivery(idOrder);
     }
 
     async updateStatusToReady(idOrder: string): Promise<Order> {
@@ -32,5 +36,9 @@ export class OrderService {
 
     async updateStatusToClosed(idOrder: string): Promise<Order> {
         return this.orderRepository.updateStatusToClosed(idOrder);
+    }
+    async getAllActiveOrders(): Promise<Order[]>
+    {
+        return this.orderRepository.getAllActiveOrders();
     }
 }
