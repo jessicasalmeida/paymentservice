@@ -4,7 +4,7 @@ import {InMemoryUserRepository} from "../driven/infra/inMemoryUserRepository";
 import {UserService} from "../../core/applications/services/userService";
 import {UserController} from "./userController";
 import {InMemoryProductRepository} from "../driven/infra/inMemoryProductRepository";
-import {ProductService} from "../../core/applications/services/ProductService";
+import {ProductService} from "../../core/applications/services/productService";
 import {ProductController} from "./productController";
 
 const router = express.Router();
