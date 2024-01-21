@@ -1,9 +1,9 @@
-import {Produto} from "../../../core/domain/produto";
+import {Product} from "../../../core/domain/product";
 import {ProductRepository} from "../../../core/applications/ports/productRepository";
 
 export class InMemoryProductRepository implements ProductRepository {
 
-    private readonly produtos: Produto[] = [
+    private readonly produtos: Product[] = [
         { id: "1", name: "Big Mac", options: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], category: "lanche", price: 10,  timeToPrepare: 15,  status: true},
         { id: "2", name: "Big Tasty", options: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], category: "lanche", price: 10,  timeToPrepare: 15,  status: true},
         { id: "3", name: "Quarteirao", options: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], category: "lanche", price: 10, timeToPrepare: 15, status: true},
@@ -21,45 +21,18 @@ export class InMemoryProductRepository implements ProductRepository {
         { id: "13", name: "Batata", options: [], category: "Acompanhamento", price: 10,timeToPrepare: 15, status: true},
 
     ];
-    async deleteProductById(id: String): Promise<Produto[]> {
-        const produto = this.produtos.find((u) => u.id === id);
-       if(!produto)
-       {
-           throw new Error(`Produto não encontrado para exclusão. ID: ${id}`);
-       }
-        const index = this.produtos.indexOf(produto);
+    async deleteProduct(product: Product): Promise<Product[]> {
+        const index = this.produtos.indexOf(product);
         this.produtos.splice(index, 1)
         return this.produtos;
     }
-    async updateProductById(id: string, newProduct: Produto): Promise<Produto> {
-        const produto = this.produtos.find((u) => u.id === id);
-        if(!produto)
-        {
-            throw new Error(`Produto não encontrado para atualização. ID: ${id}`);
-        }
-        const index = this.produtos.indexOf(produto);
-        produto.name = newProduct.name;
-        produto.options = newProduct.options;
-        produto.category = newProduct.category;
-        produto.price = newProduct.price;
-        produto.status = newProduct.status;
-        this.produtos[index] = produto;
-        return produto;
-    }
-    async deactivateProductById(id: string): Promise<Produto> {
-        const produto = this.produtos.find((u) => u.id === id);
-        if(!produto)
-        {
-            throw new Error(`Produto não encontrado para atualização. ID: ${id}`);
-        }
-        produto.status = false;
-        const index = this.produtos.indexOf(produto);
-        this.produtos.splice(index, 1);
-        this.produtos.push(produto);
-        return produto;
+    async updateProduct(product: Product): Promise<Product> {
+        const index = this.produtos.indexOf(await this.findProductById(product.id));
+        this.produtos[index] = product;
+        return product;
     }
 
-    async getActiveProducts(): Promise<Produto[]> {
+    async getActiveProducts(): Promise<Product[]> {
         const produto = this.produtos.filter(u => {
             if(u.status)
             {
@@ -73,7 +46,7 @@ export class InMemoryProductRepository implements ProductRepository {
     }
 
 
-    async getProductById(id: string): Promise<Produto> {
+    async findProductById(id: string): Promise<Product> {
         const produto = this.produtos.find((u) => u.id === id);
         if (!produto) {
             throw new Error(`Produto with id ${id} not found`);
@@ -81,23 +54,24 @@ export class InMemoryProductRepository implements ProductRepository {
         return produto;
     }
 
-    async getProductByCategory(categoria: string): Promise<Produto> {
-        const produto = this.produtos.find((u) => u.category === categoria);
+    async findProductByCategory(category: string): Promise<Product> {
+        const produto = this.produtos.find((u) => u.category === category);
         if (!produto) {
-            throw new Error(`Produto with category ${categoria} not found`);
+            throw new Error(`Produto with category ${category} not found`);
         }
         return produto;
     }
 
-    async getProducts(): Promise<Produto[]> {
+    async getAllProducts(): Promise<Product[]> {
         return this.produtos;
     }
 
-    async createProduct(productBody: Produto): Promise<Produto> {
+    async createProduct(productBody: Product): Promise<Product> {
        if(!productBody)
        {
            throw new Error(`Produto have not been added`);
        }
+       productBody.id = (this.produtos.length).toString();
         this.produtos.push(productBody);
         return productBody;
     }

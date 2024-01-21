@@ -25,11 +25,11 @@ const productService = new ProductService(productRepository);
 const productController = new ProductController(productService);
 
 const cartRepository = new InMemoryCartRepository();
-const cartService = new CartService(cartRepository);
+const cartService = new CartService(cartRepository, productRepository, userRepository);
 const cartController = new CartController(cartService);
 
 const orderRepository = new InMemoryOrderRepository();
-const orderService = new OrderService(orderRepository);
+const orderService = new OrderService(orderRepository, cartRepository);
 const orderController = new OrderController(orderService);
 
 const app = express();

@@ -29,7 +29,7 @@ export class CartController {
         const id = req.params.id;
         const product = req.query.product as string
         const observacoes = req.query.observacoes as Array<string>;
-        const cart =  await this.cartService.personalizeItens(id, product, observacoes);
+        const cart =  await this.cartService.personalizeItem(id, product, observacoes);
         res.status(200).json(cart);
     }
 

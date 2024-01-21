@@ -1,11 +1,11 @@
 import {User} from "./user";
-import {Produto} from "./produto";
+import {Product} from "./product";
 
 export interface Cart {
     id: string;
     user: User;
-    produtosList: Array<Produto>;
-    valorTotal: number;
+    products: Array<Product>;
+    totalValue: number;
     status: string;
-    pago: boolean;
+    payment: boolean;
 }

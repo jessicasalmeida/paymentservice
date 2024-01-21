@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { ParamsDictionary } from "express-serve-static-core";
 import {ProductService} from "../../core/applications/services/productService";
-import {Produto} from "../../core/domain/produto";
+import {Product} from "../../core/domain/product";
 import {Get, Route} from "tsoa";
 
 export class ProductController {

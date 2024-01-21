@@ -1,4 +1,4 @@
-export interface Produto {
+export interface Product {
     id: string;
     name: string;
     options: Array<string>;
