@@ -23,17 +23,6 @@ export class OrderController {
         res.status(200).json(order);
     }
 
-    async sendNotificationEstimatedTime(req: Request, res: Response) {
-        const id = req.params.id;
-        const order = await this.orderService.sendNotificationEstimatedTime(id);
-        res.status(200).json(order);
-    }
-    async sendNotificationDelivery(req: Request, res: Response) {
-        const id = req.params.id;
-        const order = await this.orderService.sendNotificationDelivery(id);
-        res.status(200).json(order);
-    }
-
     async updateStatusToReady(req: Request, res: Response) {
         const id = req.params.id;
         const order = await this.orderService.updateStatusToReady(id);

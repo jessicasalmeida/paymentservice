@@ -40,8 +40,13 @@ export class ProductController {
 
     async deactivateProductById(req: Request, res: Response) {
         const id = req.params.id;
-        const product =  await this.productService.deactivateProductById(id);
-        res.status(200).json(product);
+        const deactivate =  await this.productService.deactivateProductById(id);
+        if(deactivate) {
+            res.status(200).json("Produto desativado com sucesso");
+        }
+        else{
+            res.status(500).json("O produto está em um pedido ativo e não pode ser desativado")
+        }
     }
 
     async getActiveProducts(req: Request, res: Response) {

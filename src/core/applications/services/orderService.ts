@@ -36,20 +36,15 @@ export class OrderService {
         return `The estimate time to order is ready is ${estimatedDelivery}`;
     }
 
-    async sendNotificationEstimatedTime(idOrder: string): Promise<string> {
-        const order = await this.orderRepository.findOrderById(idOrder);
-        return `The estimated time to order is ${order.deliveryTime}`;
-    }
-
     async sendNotificationDelivery(idOrder: string): Promise<string> {
-        const order = await this.orderRepository.findOrderById(idOrder);
+        await this.orderRepository.findOrderById(idOrder);
         return `The order is ready to delivery`;
     }
 
-    async updateStatusToReady(idOrder: string): Promise<Order> {
+    async updateStatusToReady(idOrder: string): Promise<string> {
         const order = await this.orderRepository.findOrderById(idOrder);
         order.status = "READY";
-        return this.orderRepository.updateOrder(order);
+        return await this.sendNotificationDelivery(idOrder);
     }
 
     async updateStatusToDelivered(idOrder: string): Promise<Order> {
@@ -69,7 +64,8 @@ export class OrderService {
 
     private async estimatedDelivery(idCart: string): Promise<number>
     {
-        return (await this.cartRepository.findCartById(idCart)).products.reduce((sum, p) => sum + p.timeToPrepare, 0);
+        const cart = Object.assign({}, await this.cartRepository.findCartById(idCart));
+        return cart.products.reduce((sum, p) => sum + p.timeToPrepare, 0);
 
     }
 }

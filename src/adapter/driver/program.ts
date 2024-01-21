@@ -21,15 +21,15 @@ const userService= new UserService(userRepository);
 const userController = new UserController(userService);
 
 const productRepository = new InMemoryProductRepository();
-const productService = new ProductService(productRepository);
-const productController = new ProductController(productService);
-
 const cartRepository = new InMemoryCartRepository();
-const cartService = new CartService(cartRepository, productRepository, userRepository);
-const cartController = new CartController(cartService);
-
 const orderRepository = new InMemoryOrderRepository();
+
+const productService = new ProductService(productRepository,orderRepository, cartRepository);
+const cartService = new CartService(cartRepository, productRepository, userRepository);
 const orderService = new OrderService(orderRepository, cartRepository);
+
+const productController = new ProductController(productService);
+const cartController = new CartController(cartService);
 const orderController = new OrderController(orderService);
 
 const app = express();
@@ -65,8 +65,6 @@ app.post('/cart/cancel/:id', cartController.cancelCart.bind(cartController));
 app.post('/order/receive/:id', orderController.receiveOrder.bind(orderController));
 app.post('/order/prepare/:id', orderController.prepareOrder.bind(orderController));
 app.get('/order/estimate/:id', orderController.estimateDelivery.bind(orderController));
-app.get('/order/notification/estimatedtime/:id', orderController.sendNotificationEstimatedTime.bind(orderController));
-app.get('/order/notification/delivery/:id', orderController.sendNotificationDelivery.bind(orderController));
 app.post('/order/update/ready/:id', orderController.updateStatusToReady.bind(orderController));
 app.post('/order/update/delivered/:id', orderController.updateStatusToDelivered.bind(orderController));
 app.post('/order/update/closed/:id', orderController.updateStatusToClosed.bind(orderController));

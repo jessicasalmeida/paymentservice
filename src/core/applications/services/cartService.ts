@@ -28,10 +28,11 @@ export class CartService {
     }
     async addProduct(idCart: string, idProduct: string): Promise<Cart> {
         const cart = await this.cartRepository.findCartById(idCart);
-        const product = await this.productRepository.findProductById(idProduct);
+        let product =  Object.assign({},await this.productRepository.findProductById(idProduct));
+        product.price = this.calculateProductPrice(cart.products, product);
         const newProducts = cart.products;
         newProducts.push(product);
-        let valorTotal = newProducts.reduce((sum, p) => sum + p.price, 0);
+        let valorTotal = this.calculateTotalValue(newProducts);
         cart.products = newProducts;
         cart.totalValue = valorTotal;
         return this.cartRepository.updateCart(cart);
@@ -39,8 +40,8 @@ export class CartService {
 
     async personalizeItem(idCart: string, idProduct: string, options: Array<string>): Promise<Cart> {
         const cart = await this.cartRepository.findCartById(idCart);
-        const listProducts = cart.products;
-        const products = listProducts.find(u => u.id == idProduct);
+        let listProducts = cart.products;
+        let products = listProducts.find(u => u.id == idProduct);
         if(!products){
             throw new Error("Product with id ${idProduct} not found in cart {idCart} ")
         }
@@ -63,15 +64,39 @@ export class CartService {
         cart.payment = true;
         return this.cartRepository.updateCart(cart);
     }
-    async sendToKitchen(id: string): Promise<Cart>{
+    async sendToKitchen(id: string): Promise<boolean>{
         const cart = await this.cartRepository.findCartById(id);
-        cart.status = "SENDED"
-        return this.cartRepository.updateCart(cart);
+        if(cart.payment) {
+            cart.status = "SENDED"
+            await this.cartRepository.updateCart(cart);
+            return  true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     async cancelCart(id: string): Promise<Cart>{
         const cart = await this.cartRepository.findCartById(id);
         cart.status = "CANCELLED"
         return this.cartRepository.updateCart(cart);
+    }
+    private calculateTotalValue(productsList: Product[]): number{
+        return productsList.reduce((sum, p) => sum + p.price, 0);
+    }
+
+    private calculateProductPrice(productsList: Product[], product: Product): number
+    {
+        let qtdCombos = productsList.filter(value => value.category == "combo").length;
+        let qtdBebida = productsList.filter(value => value.category === "bebida").length;
+        let qtdAcompanhamento = productsList.filter(value => value.category === "acompanhamento").length;
+
+        if (product.category === "bebida" && qtdCombos > qtdBebida ||
+            product.category === "acompanhamento" && qtdCombos > qtdAcompanhamento)
+        {
+            return 0;
+        }
+        return  product.price;
     }
 }

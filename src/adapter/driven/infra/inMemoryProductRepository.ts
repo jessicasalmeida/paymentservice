@@ -18,7 +18,7 @@ export class InMemoryProductRepository implements ProductRepository {
         { id: "11", name: "Combo Big Mac + Bebida + Acompanhamento", options: ['Pão Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Alface Americana', 'Molho Especial', 'Cebola', 'Picles'], category: "combo", price: 30,  timeToPrepare: 15,  status: true},
         { id: "12", name: "Combo Big Tasty + Bebida + Acompanhamento", options: ['Pão com Gergelim', 'Hamburguer', 'Queijo Emental', 'Alface Americana', 'Molho Tasty', 'Cebola', 'Tomate'], category: "combo", price: 30,  timeToPrepare: 15,  status: true},
         { id: "12", name: "Combo Quarteirao+ Bebida + Acompanhamento", options: ['Pão com Gergelim', 'Hamburguer', 'Queijo Cheddar', 'Ketchup', 'Mostarda', 'Cebola', 'Picles'], category: "combo", price: 30,  timeToPrepare: 15, status: true},
-        { id: "13", name: "Batata", options: [], category: "Acompanhamento", price: 10,timeToPrepare: 15, status: true},
+        { id: "13", name: "Batata", options: [], category: "acompanhamento", price: 10,timeToPrepare: 15, status: true},
 
     ];
     async deleteProduct(product: Product): Promise<Product[]> {

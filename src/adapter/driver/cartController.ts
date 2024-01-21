@@ -53,8 +53,13 @@ export class CartController {
 
     async sendToKitchen(req: Request, res: Response) {
         const id = req.params.id;
-        const cart =  await this.cartService.sendToKitchen(id);
-        res.status(200).json(cart);
+        const cartSended =  await this.cartService.sendToKitchen(id);
+        if(cartSended) {
+            res.status(200).json("Pedido enviado a cozinha");
+        }
+        else {
+            res.status(500).json("Pedido aguardando pagamento. Por favor realize o pagamento para prosseguir");
+        }
     }
 
     async cancelCart(req: Request, res: Response) {
