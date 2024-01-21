@@ -6,24 +6,31 @@ import {ProductController} from "./productController";
 import {CartController} from "./cartController";
 import {InMemoryProductRepository} from "../driven/infra/inMemoryProductRepository";
 import {InMemoryCartRepository} from "../driven/infra/inMemoryCartRepository";
-import {CartService} from "../../core/applications/services/CartService";
-import {ProductService} from "../../core/applications/services/ProductService";
+import {CartService} from "../../core/applications/services/cartService";
+import {ProductService} from "../../core/applications/services/productService";
 
 
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
+import {InMemoryOrderRepository} from "../driven/infra/inMemoryOrderRepository";
+import {OrderService} from "../../core/applications/services/orderService";
+import {OrderController} from "./orderController";
 
 const userRepository = new InMemoryUserRepository();
 const userService= new UserService(userRepository);
 const userController = new UserController(userService);
 
 const productRepository = new InMemoryProductRepository();
-const productService = new ProductService(productRepository);
-const productController = new ProductController(productService);
-
 const cartRepository = new InMemoryCartRepository();
-const cartService = new CartService(cartRepository);
+const orderRepository = new InMemoryOrderRepository();
+
+const productService = new ProductService(productRepository,orderRepository, cartRepository);
+const cartService = new CartService(cartRepository, productRepository, userRepository);
+const orderService = new OrderService(orderRepository, cartRepository);
+
+const productController = new ProductController(productService);
 const cartController = new CartController(cartService);
+const orderController = new OrderController(orderService);
 
 const app = express();
 
@@ -53,6 +60,15 @@ app.post('/cart/pay/:id', cartController.payCart.bind(cartController));
 app.post('/cart/kitchen/:id', cartController.sendToKitchen.bind(cartController));
 app.post('/cart/cancel/:id', cartController.cancelCart.bind(cartController));
 
+//order
+
+app.post('/order/receive/:id', orderController.receiveOrder.bind(orderController));
+app.post('/order/prepare/:id', orderController.prepareOrder.bind(orderController));
+app.get('/order/estimate/:id', orderController.estimateDelivery.bind(orderController));
+app.post('/order/update/ready/:id', orderController.updateStatusToReady.bind(orderController));
+app.post('/order/update/delivered/:id', orderController.updateStatusToDelivered.bind(orderController));
+app.post('/order/update/closed/:id', orderController.updateStatusToClosed.bind(orderController));
+app.get('/order/', orderController.getAllActiveOrders.bind(orderController));
 
 //
 app.listen(8000, () => console.log('Server is listening on port 8000'));

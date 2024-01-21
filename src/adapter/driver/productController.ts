@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { ParamsDictionary } from "express-serve-static-core";
-import {ProductService} from "../../core/applications/services/ProductService";
-import {Produto} from "../../core/domain/produto";
+import {ProductService} from "../../core/applications/services/productService";
+import {Product} from "../../core/domain/product";
 import {Get, Route} from "tsoa";
 
 export class ProductController {
@@ -40,8 +40,13 @@ export class ProductController {
 
     async deactivateProductById(req: Request, res: Response) {
         const id = req.params.id;
-        const product =  await this.productService.deactivateProductById(id);
-        res.status(200).json(product);
+        const deactivate =  await this.productService.deactivateProductById(id);
+        if(deactivate) {
+            res.status(200).json("Produto desativado com sucesso");
+        }
+        else{
+            res.status(500).json("O produto está em um pedido ativo e não pode ser desativado")
+        }
     }
 
     async getActiveProducts(req: Request, res: Response) {

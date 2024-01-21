@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { ParamsDictionary } from "express-serve-static-core";
 import {Get, Route} from "tsoa";
-import {CartService} from "../../core/applications/services/CartService";
+import {CartService} from "../../core/applications/services/cartService";
 
 export class CartController {
     constructor(private readonly cartService: CartService) { }
@@ -29,7 +29,7 @@ export class CartController {
         const id = req.params.id;
         const product = req.query.product as string
         const observacoes = req.query.observacoes as Array<string>;
-        const cart =  await this.cartService.personalizeItens(id, product, observacoes);
+        const cart =  await this.cartService.personalizeItem(id, product, observacoes);
         res.status(200).json(cart);
     }
 
@@ -53,8 +53,13 @@ export class CartController {
 
     async sendToKitchen(req: Request, res: Response) {
         const id = req.params.id;
-        const cart =  await this.cartService.sendToKitchen(id);
-        res.status(200).json(cart);
+        const cartSended =  await this.cartService.sendToKitchen(id);
+        if(cartSended) {
+            res.status(200).json("Pedido enviado a cozinha");
+        }
+        else {
+            res.status(500).json("Pedido aguardando pagamento. Por favor realize o pagamento para prosseguir");
+        }
     }
 
     async cancelCart(req: Request, res: Response) {
