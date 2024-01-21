@@ -1,0 +1,15 @@
+version: "3"
+services:
+  api:
+    image: jessicasalmeida/restaurante
+    ports:
+      - "5000:8000"
+    links:
+      - link-db
+    link-db:
+      image: tutum/mongodb
+      ports:
+        - "27017:27017"
+        - "28017:28017"
+      enviroment:
+        - AUTH-no

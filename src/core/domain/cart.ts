@@ -1,11 +1,12 @@
-import {User} from "./user";
-import {Produto} from "./produto";
+import {user} from "./user";
+import {Product} from "./product";
+import {ObjectId} from "mongodb";
 
-export interface Cart {
-    id: string;
-    user: User;
-    produtosList: Array<Produto>;
-    valorTotal: number;
+export default interface Cart {
+    _id: ObjectId;
+    user: user;
+    products: Array<Product>;
+    totalValue: number;
     status: string;
-    pago: boolean;
+    payment: boolean;
 }
