@@ -1,48 +1,34 @@
 import {orderRepository} from "../../../core/applications/ports/order-repository";
-import {Order} from "../../../core/domain/order";
-import mongoose from "mongoose";
-import {Int32} from "mongodb";
+import order from "../../../core/domain/order";
+import {Int32, ObjectId} from "mongodb";
+import {collections} from "./db-connect";
 
 export class orderRepositoryMongoBd implements orderRepository {
 
-    private readonly orders: Order[] = [
-        {
-            idOrder: "1",
-            idCart: "1",
-            receiveDate: new Date(),
-            deliveryTime: 0,
-            status: "READY"
-        }];
-
-    private readonly orderSchema = new mongoose.Schema({
-        idOrder: {type:String, required:true},
-        idCart: {type:String, required:true},
-        receiveDate:{type:String, required:true},
-        deliveryTime:{type:Number, required:true},
-        status:{type:String, required:true}
-    });
-    private readonly orders1 = mongoose.model('order', this.orderSchema);
-    async receiveOrder(order: Order): Promise<Order> {
-        this.orders.push(order);
+    async receiveOrder(order: order): Promise<order> {
+        await collections.orders?.insertOne(order);
         return order;
     }
 
-    async updateOrder(order: Order): Promise<Order> {
-        const index = this.orders.indexOf(await this.findOrderById((order).idOrder));
-        this.orders[index] = order;
+    async updateOrder(order: order): Promise<order> {
+        const query = { _id: new ObjectId(order._id)};
+        await collections.orders?.updateOne(query, {$set: order});
         return order;
     }
-    async getActiveOrders(): Promise<Order[]> {
-        return this.orders.filter(value => value.status != "CLOSED" && value.status != "DELIVERED");
+    async getActiveOrders(): Promise<order[]> {
+        const query = { $and: [ {status: {$not: {$eq:"CLOSED"}}}, {status: {$not: {$eq:"DELIVERED"}}}]};
+        const orders = await collections.orders?.find(query).toArray() as order[];
+        return orders;
     }
 
-    async getAllOrders(): Promise<Order[]> {
-        return this.orders;
+    async getAllOrders(): Promise<order[]> {
+        return await collections.orders?.find({}).toArray() as order[];
     }
 
-    async findOrderById(id: string) : Promise<Order>
+    async findOrderById(id: string) : Promise<order>
     {
-        const order = this.orders.find(u => u.idOrder === id);
+        const query = { _id: new ObjectId(id)};
+        const order = await collections.orders?.findOne(query);
         if (!order) {
             throw new Error(`Order with id ${id} not found`);
         }

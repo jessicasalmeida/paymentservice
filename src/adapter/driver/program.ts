@@ -40,7 +40,8 @@ connectToDataBase()
         app.use(morgan("tiny"));
         app.use(express.static("public"));
 
-        app.get('/users/:id', userC.getUserById.bind(userController));
+        app.get('/users/:id', userC.getUserById.bind(userC));
+        app.post('/users', userC.createUser.bind(userC));
 
 //produto
         app.get('/produto/categoria/:categoria', productC.getProductByCategory.bind(productC));

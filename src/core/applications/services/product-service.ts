@@ -1,21 +1,23 @@
 
-import {Product} from "../../domain/product";
+import product from "../../domain/product";
 import {productRepository} from "../ports/product-repository";
 import {orderRepository} from "../ports/order-repository";
 import {cartRepository} from "../ports/cart-repository";
+import {ObjectId} from "mongodb";
+import cart from "../../domain/cart";
 
 export class productService {
     constructor(private readonly productRepository: productRepository,
                 private readonly orderRepository: orderRepository,
                 private readonly cartRepository : cartRepository) { }
 
-    async getProductByCategory(id: string): Promise<Product> {
+    async getProductByCategory(id: string): Promise<product[]> {
         return this.productRepository.findProductByCategory(id);
     }
-    async getProductById(id: string): Promise<Product> {
+    async getProductById(id: string): Promise<product> {
         return this.productRepository.findProductById(id);
     }
-    async createProduct(product: Product): Promise<Product> {
+    async createProduct(product: product): Promise<product> {
         return this.productRepository.createProduct(product);
     }
     async deleteProductById(id: string): Promise<boolean> {
@@ -28,7 +30,7 @@ export class productService {
             return false
         }
     }
-    async updateProductById(id: string, newProduct: Product): Promise<Product> {
+    async updateProductById(id: string, newProduct: product): Promise<product> {
         const olderProduct = await this.productRepository.findProductById(id);
         newProduct._id = olderProduct._id;
         return this.productRepository.updateProduct(newProduct);
@@ -44,21 +46,22 @@ export class productService {
             return false
         }
     }
-    async getActiveProducts(): Promise<Product[]> {
+    async getActiveProducts(): Promise<product[]> {
         return this.productRepository.getActiveProducts();
     }
 
     async verifyActiveOrder(id: string): Promise<boolean>
     {
+        const idProduct = new ObjectId(id);
         const orders = await this.orderRepository.getActiveOrders();
-        let products = {} as Product[];
+        let products = {} as product[];
         for (const order of orders) {
-            products = (await this.cartRepository.findCartById(order.idCart)).products.filter((p: { id: string; }) => p.id === id);
-            if(products){
-                return false;
+            const cart = (await this.cartRepository.findCartById(order.idCart)) as cart;
+            products = cart.products.filter((p) => p._id.equals(idProduct));
+            if(products.length>0){
+                return true;
             }
         }
-        return true;
+        return false;
     }
-
 }

@@ -1,11 +1,11 @@
-import {Product} from "../../domain/product";
+import product from "../../domain/product";
 
 export interface productRepository {
-    findProductById(id: string): Promise<Product>;
-    findProductByCategory(category: string): Promise<Product>;
-    createProduct(product: Product) : Promise<Product>;
-    deleteProduct(product: Product): Promise<Product[]>;
-    updateProduct(product: Product): Promise<Product>;
-    getActiveProducts(): Promise<Product[]>;
-    getAllProducts(): Promise<Product[]>;
+    findProductById(id: string): Promise<product>;
+    findProductByCategory(category: string): Promise<product[]>;
+    createProduct(product: product) : Promise<product>;
+    deleteProduct(product: product): Promise<product[]>;
+    updateProduct(product: product): Promise<product>;
+    getActiveProducts(): Promise<product[]>;
+    getAllProducts(): Promise<product[]>;
 }

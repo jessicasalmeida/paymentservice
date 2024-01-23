@@ -1,21 +1,23 @@
 import {cartRepository} from "../ports/cart-repository";
-import {Order} from "../../domain/order";
+import order from "../../domain/order";
 import {orderRepository} from "../ports/order-repository";
+import {ObjectId} from "mongodb";
 
 export class orderService {
     constructor(private readonly orderRepository: orderRepository,
                 private readonly cartRepository: cartRepository) { }
 
-    async receiveOrder(idCart: string): Promise<Order> {
+    async receiveOrder(idCart: string): Promise<order> {
         const status = "RECEIVED";
         let estimatedDelivery: number = await this.estimatedDelivery(idCart);
-        const id = ((await this.orderRepository.getAllOrders()).length+1).toString();
-        const ordersReceived = (await this.getAllActiveOrders()).filter(value => (value.status == "RECEIVED" || value.status == "PREPARING") && id >= value.idOrder);
+        const ordersReceived = (await this.getAllActiveOrders()).filter(value =>
+            (value.status == "RECEIVED" || value.status == "PREPARING")
+            && Date.now().valueOf() >= value.receiveDate.valueOf());
         for (const value of ordersReceived) {
             estimatedDelivery += await this.estimatedDelivery(value.idCart);
         }
         const order = {
-            idOrder: id,
+            _id: new ObjectId(),
             idCart: idCart,
             receiveDate: new Date(),
             deliveryTime: estimatedDelivery,
@@ -24,7 +26,7 @@ export class orderService {
         return this.orderRepository.receiveOrder(order);
     }
 
-    async prepareOrder(idOrder: string): Promise<Order> {
+    async prepareOrder(idOrder: string): Promise<order> {
         const order = await this.orderRepository.findOrderById(idOrder);
         order.status = "PREPARING";
         return this.orderRepository.updateOrder(order);
@@ -47,17 +49,17 @@ export class orderService {
         return await this.sendNotificationDelivery(idOrder);
     }
 
-    async updateStatusToDelivered(idOrder: string): Promise<Order> {
+    async updateStatusToDelivered(idOrder: string): Promise<order> {
         const order = await this.orderRepository.findOrderById(idOrder);
         order.status = "DELIVERED";
         return this.orderRepository.updateOrder(order);
     }
 
-    async updateStatusToClosed(idOrder: string): Promise<Order> { const order = await this.orderRepository.findOrderById(idOrder);
+    async updateStatusToClosed(idOrder: string): Promise<order> { const order = await this.orderRepository.findOrderById(idOrder);
         order.status = "CLOSED";
         return this.orderRepository.updateOrder(order);
     }
-    async getAllActiveOrders(): Promise<Order[]>
+    async getAllActiveOrders(): Promise<order[]>
     {
         return this.orderRepository.getActiveOrders();
     }
@@ -66,6 +68,5 @@ export class orderService {
     {
         const cart = Object.assign({}, await this.cartRepository.findCartById(idCart));
         return cart.products.reduce((sum: any, p: { timeToPrepare: any; }) => sum + p.timeToPrepare, 0);
-
     }
 }

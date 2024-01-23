@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
 import { ParamsDictionary } from "express-serve-static-core";
 import {productService} from "../../core/applications/services/product-service";
-import {Product} from "../../core/domain/product";
 import {Get, Route} from "tsoa";
 
 export class productController {
+
     constructor(private readonly productService: productService) { }
 
     async getProductById(req: Request, res: Response) {

@@ -1,6 +1,7 @@
+import {ObjectId} from "mongodb";
 
-export interface Order {
-    idOrder: string;
+export default interface order {
+    _id: ObjectId;
     idCart: string;
     receiveDate: Date;
     deliveryTime: number;

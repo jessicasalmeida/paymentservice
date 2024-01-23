@@ -24,7 +24,7 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "start": "node js/adapter/driver/program.js",
+    "start": "node dist/js/adapter/driver/program.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "dev": "nodemon"

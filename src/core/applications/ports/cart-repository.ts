@@ -1,10 +1,7 @@
-import {Cart} from "../../domain/cart";
-import {user} from "../../domain/user";
-import {Product} from "../../domain/product";
-import {Order} from "../../domain/order";
+import cart from "../../domain/cart";
 
 export interface cartRepository {
-    createCart(newCart: Cart): Promise<Cart>;
-    updateCart(cart: Cart) : Promise<Cart>;
-    findCartById(id: string): Promise<Cart>;
+    createCart(newCart: cart): Promise<cart>;
+    updateCart(cart: cart) : Promise<cart>;
+    findCartById(id: string): Promise<cart>;
 }
