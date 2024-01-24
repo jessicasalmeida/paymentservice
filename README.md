@@ -24,6 +24,12 @@ getUserById: /users/:id
 -Exemplo:
     users/65ad86e5c8f936abc7bb2fb3 (TIP: Copie o ID do createUser e o insira na URL)
 
+PRODUCTS
+
+CART
+
+USER
+
 
 
 
