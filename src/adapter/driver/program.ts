@@ -51,6 +51,8 @@ connectToDataBase()
         app.post('/produto/:id', productC.updateProductById.bind(productC));
         app.post('/produto/deactive/:id', productC.deactivateProductById.bind(productC));
         app.get('/produto/', productC.getActiveProducts.bind(productC));
+        app.get('/produto/all', productC.getAllProducts.bind(productC));
+
 
 //cart
         app.post('/cart/', cartC.createCart.bind(cartC));

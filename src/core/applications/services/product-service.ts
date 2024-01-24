@@ -50,6 +50,10 @@ export class productService {
         return this.productRepository.getActiveProducts();
     }
 
+    async getAllProducts(): Promise<product[]> {
+        return this.productRepository.getAllProducts();
+    }
+
     async verifyActiveOrder(id: string): Promise<boolean>
     {
         const idProduct = new ObjectId(id);

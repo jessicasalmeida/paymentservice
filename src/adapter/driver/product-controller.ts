@@ -53,4 +53,8 @@ export class productController {
         const product =  await this.productService.getActiveProducts();
         res.status(200).json(product);
     }
+    async getAllProducts(req: Request, res: Response) {
+        const product =  await this.productService.getAllProducts();
+        res.status(200).json(product);
+    }
 }
