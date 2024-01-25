@@ -43,15 +43,15 @@ connectToDataBase()
         app.get('/users/:id', userC.getUserById.bind(userC));
         app.post('/users', userC.createUser.bind(userC));
 
-//produto
-        app.get('/produto/categoria/:categoria', productC.getProductByCategory.bind(productC));
-        app.get('/produto/:id', productC.getProductById.bind(productC));
-        app.post('/produto/', productC.createProduct.bind(productC));
-        app.delete('/produto/:id', productC.deleteProductById.bind(productC));
-        app.post('/produto/:id', productC.updateProductById.bind(productC));
-        app.post('/produto/deactive/:id', productC.deactivateProductById.bind(productC));
-        app.get('/produto/', productC.getActiveProducts.bind(productC));
-        app.get('/produto/all', productC.getAllProducts.bind(productC));
+//products
+        app.get('/product/categoria/:categoria', productC.getProductByCategory.bind(productC));
+        app.get('/product/:id', productC.getProductById.bind(productC));
+        app.post('/product/', productC.createProduct.bind(productC));
+        app.delete('/product/:id', productC.deleteProductById.bind(productC));
+        app.post('/product/:id', productC.updateProductById.bind(productC));
+        app.post('/product/deactive/:id', productC.deactivateProductById.bind(productC));
+        app.get('/products/active', productC.getActiveProducts.bind(productC));
+        app.get('/products/all', productC.getAllProducts.bind(productC));
 
 
 //cart
@@ -74,7 +74,6 @@ connectToDataBase()
         app.post('/order/update/delivered/:id', orderC.updateStatusToDelivered.bind(orderC));
         app.post('/order/update/closed/:id', orderC.updateStatusToClosed.bind(orderC));
         app.get('/order/', orderC.getAllActiveOrders.bind(orderC));
-
 //
         app.listen(8000, () => console.log('Server is listening on port 8000'));
 
