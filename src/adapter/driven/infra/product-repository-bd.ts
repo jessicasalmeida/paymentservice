@@ -62,8 +62,10 @@ export class productRepositoryBd implements productRepository {
     }
 
     async getAllProducts(): Promise<product[]> {
-        await collections.product?.insertMany(this.produtos);
-        this.produtos = {} as product[];
+        if(this.produtos.length >0) {
+            await collections.product?.insertMany(this.produtos);
+            this.produtos = {} as product[];
+        }
         return await collections.product?.find({}).toArray() as product[];
     }
 

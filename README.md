@@ -1,9 +1,8 @@
 # fiap_restaurante
 
 -------------Preparando o ambiente------------
--Banco de Dados: docker-compose -f docker-compose.yml up
 -Aplicação Imagem: docker build -t jessicasalmeida/restaurante .
--Aplicação Run: docker run -d -p 5000:8000 jessicasalmeida/restaurante
+-Banco de Dados Run: docker-compose -f docker-compose.yml up -d
 -Execução Local: npm run dev
 
 Links:
@@ -12,23 +11,27 @@ MONGO: http://localhost:27017
 
 -------------Testando a aplicação-------------
 -Collection Postman fiap_restaurante, esta divida em user, products, cart e order.
+-Na collection fiap_restaurante do postman existe uma variavel configurada que pode ser editada a porta 5000 para ambiente docker e 8000 para local (não esqueça de salvar ao editar ;D)
 
+
+-------------Aplicação------------------------
 
 --Gestão de Products--
 
-*getAllProducts: /products/all
+*getAllProducts: /product
 (TIP: para melhor testabilidade do professor este método carrega os produtos no banco de dados)
 
 *createProduct: /product/
 --Exemplo:
     {
-        "name": "Sorvete de Baunilha",
+        "name": "Sorvete Misto",
         "options": [],
         "category": "sobremesa",
         "price": 10,
         "timeToPrepare": 2,
         "status": true
     }
+(TIP: salve o ID caso queira usar posteriormente)
 
 *getProductById: /product/:id
 -Exemplo: produto/65aeffe53cb25a62bcec76f7
@@ -36,22 +39,22 @@ MONGO: http://localhost:27017
 *updateProductById: /product/:id
 --Exemplo: produto/65aeffe53cb25a62bcec76f7
     {
-        "name": "Batatao",
+        "name": "Sorvete Misto G",
         "options": [],
-        "category": "acompanhamento",
+        "category": "sobremesa",
         "price": 10,
-        "timeToPrepare": 15,
+        "timeToPrepare": 2,
         "status": true
     }
 *deleteProductById: /product/:id
 --Exemplo: produto/65aeffe53cb25a62bcec76f7
-Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa
+Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa. 
+Para testar que está em uma order ativa adicione o produto no carrinho e o avance com a API receiveOrder,
+neste momento o pedido esta ativo e o produto não poderá ser excluido
 
 *deactivateProductById: /product/deactive/:id
 --Exemplo: produto/65aeffe53cb25a62bcec76f7
 Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa
-
-*getActiveProducts: /product/active
 
 *getProductByCategory: /product/categoria/:categoria
 --Exemplo: produto/combo; produto/lanche; produto/bebida; produto/sobremesa; produto/acompanhamento
@@ -62,9 +65,9 @@ USER
 *createUser: /users
 --Exemplo:
     {
-        "cpf": "000.000.000-00"
-        "name": "John Doe2",
-        "email": "john.doe@example.com"
+        "cpf": "000.000.000-00",
+        "name": "Jessica",
+        "email": "jessica.jessica@example.com"
     }
 *getUserById: /users/:id
 --Exemplo:
@@ -107,7 +110,7 @@ query.param: options
 --Gestão de ORDER--
 receiveOrder: /order/receive/:id
 --Exemplo: /order/receive/65b19e8f5fe107d74bd05ce0
-(TIP: É gerado o id da order para sequencia das proximas)
+(TIP: Agora você esta manipulando a order. Copie e cole o id da order para sequencia das proximas)
 
 prepareOrder: /order/prepare/:id
 --Exemplo: /order/prepare/65b1a8b7f56e976b1536bf52

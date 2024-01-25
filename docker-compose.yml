@@ -1,6 +1,15 @@
 version: '3.1'
 
 services:
+  api:
+    image: jessicasalmeida/restaurante
+    ports:
+      - "5000:8000"
+    links:
+      - mongo
+    networks:
+      - mongo-compose-network
+
   mongo:
     image: mongo
     environment:
@@ -10,6 +19,7 @@ services:
       - "27017:27017"
     networks:
       - mongo-compose-network
+
 
   mongo-express:
     image: mongo-express

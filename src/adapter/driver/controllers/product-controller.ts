@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { ParamsDictionary } from "express-serve-static-core";
-import {productService} from "../../core/applications/services/product-service";
+import {productService} from "../../../core/applications/services/product-service";
 import {Get, Route} from "tsoa";
 
 export class productController {
@@ -8,6 +8,7 @@ export class productController {
     constructor(private readonly productService: productService) { }
 
     async getProductById(req: Request, res: Response) {
+        /*  #swagger.parameters['$ref'] = ['#/components/parameters/someParameter1', '#/components/parameters/someParameter2'] */
         const id = req.params.id;
         const produto = await this.productService.getProductById(id);
         res.status(200).json(produto);
@@ -27,8 +28,13 @@ export class productController {
 
     async deleteProductById(req: Request, res: Response) {
         const id = req.params.id;
-        const product =  await this.productService.deleteProductById(id);
-        res.status(200).json(product);
+        const isDelete =  await this.productService.deleteProductById(id);
+        if(isDelete) {
+            res.status(200).json("Produto deletado com sucesso");
+        }
+        else{
+            res.status(500).json("O produto está em um pedido ativo e não pode ser deletado")
+        }
     }
 
     async updateProductById(req: Request, res: Response) {

@@ -1,4 +1,4 @@
-import {orderService} from "../../core/applications/services/order-service";
+import {orderService} from "../../../core/applications/services/order-service";
 import {Request, Response} from "express";
 
 export class orderController {
