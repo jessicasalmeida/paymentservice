@@ -2,22 +2,21 @@
 
 -------------Preparando o ambiente------------
 Executando em ambiente docker
--Passo 1: Aplicação Imagem: docker build -t jessicasalmeida/restaurante .
--Passo 2: Banco de Dados + Aplicação Run: docker-compose -f docker-compose.yml up -d
--Passo 3: Collection disponivel na raiz da pasta do projeto "fiap_restaurante.postman_collection.json"
+-Passo 1: Intalação dependencias: npm install
+-Passo 2: Build da Aplicação: npm run build
+-Passo 3: Build da Imagem da Aplicação: docker build -t fiap/restaurante .
+-Passo 4: Run Banco de Dados + Imagem Aplicação: docker-compose -f docker-compose.yml up -d
+-Passo 5: Collection disponivel na raiz da pasta do projeto "fiap_restaurante.postman_collection.json"
+--Aplicação disponivel na porta 5000, mongo-express 8081 e mongo 27017
 
 Executando em ambiente local
 -Passo 1: Altere o arquivo .env a variavel DB_CONN_STRING para "mongodb://root:MongoDB2019!@localhost:27017/"
 -Passo 2: Suba o ambiente do docker compose para o banco de dados
 -Passo 3: NPM RUN DEV
 
-Links BD:
-MONGODB_EXPRESS: http://localhost:8081/db/restaurante_db
-MONGO: http://localhost:27017
-
 -------------Testando a aplicação-------------
 -Collection Postman fiap_restaurante, esta divida em user, products, cart e order.
--Na collection fiap_restaurante do postman existe uma variavel configurada que pode ser editada a porta 5000 para ambiente docker e 8000 para local (não esqueça de salvar ao editar ;D)
+-Na collection fiap_restaurante do postman existe uma variavel configurada para a porta 5000 para ambiente docker e 8000 para local (não esqueça de salvar ao editar ;D)
 
 -------------Aplicação------------------------
 
@@ -97,7 +96,7 @@ query.param: user
 query.param: produto
 --Exemplo: /cart/product/65b19e8f5fe107d74bd05ce0?product=65b1a124e453756a9567b9c7
 (TIP: Ao adicionar use getProductByCategory para verificar quais os produtos da categoria pretendida)
-(Policies: A cada combo selecionado, possui direito a 1 bebida e 1 acompanhamento incluso no valor do combo, logo este itens terão seu valor zerado no carrinho)
+(Policies: Ao adicionar 1 compo e posteriomente adicionar 1 bebida e 1 acompanhamento, este itens terão seu valor zerado no cart, pois são inclusos no combo)
 
 *personalizeItens: /cart/itens/:id
 query.param: produto

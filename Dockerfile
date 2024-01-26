@@ -6,7 +6,6 @@ WORKDIR /usr/src/app/
 COPY package*.json /usr/src/app/
 
 RUN npm install
-
 COPY ./dist/ /usr/src/app/dist
 COPY .env /usr/src/app
 
