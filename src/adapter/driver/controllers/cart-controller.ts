@@ -28,7 +28,7 @@ export class cartController {
     async personalizeItens(req: Request, res: Response) {
         const id = req.params.id;
         const product = req.query.product as string
-        const options = req.query.observacoes as Array<string>;
+        const options = req.query.options as Array<string>;
         const cart =  await this.cartService.personalizeItem(id, product, options);
         res.status(200).json(cart);
     }

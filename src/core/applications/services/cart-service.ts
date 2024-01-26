@@ -45,6 +45,8 @@ export class cartService {
         let products = listProducts.find((u) => {
             return u._id.equals(new ObjectId(idProduct) );
         });
+
+
         if(!products){
             throw new Error("Product with id ${idProduct} not found in cart {idCart} ")
         }

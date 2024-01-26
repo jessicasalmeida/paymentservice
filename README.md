@@ -1,11 +1,17 @@
 # fiap_restaurante
 
 -------------Preparando o ambiente------------
--Aplicação Imagem: docker build -t jessicasalmeida/restaurante .
--Banco de Dados Run: docker-compose -f docker-compose.yml up -d
--Execução Local: npm run dev
+Executando em ambiente docker
+-Passo 1: Aplicação Imagem: docker build -t jessicasalmeida/restaurante .
+-Passo 2: Banco de Dados + Aplicação Run: docker-compose -f docker-compose.yml up -d
+-Passo 3: Collection disponivel na raiz da pasta do projeto "fiap_restaurante.postman_collection.json"
 
-Links:
+Executando em ambiente local
+-Passo 1: Altere o arquivo .env a variavel DB_CONN_STRING para "mongodb://root:MongoDB2019!@localhost:27017/"
+-Passo 2: Suba o ambiente do docker compose para o banco de dados
+-Passo 3: NPM RUN DEV
+
+Links BD:
 MONGODB_EXPRESS: http://localhost:8081/db/restaurante_db
 MONGO: http://localhost:27017
 
@@ -13,13 +19,12 @@ MONGO: http://localhost:27017
 -Collection Postman fiap_restaurante, esta divida em user, products, cart e order.
 -Na collection fiap_restaurante do postman existe uma variavel configurada que pode ser editada a porta 5000 para ambiente docker e 8000 para local (não esqueça de salvar ao editar ;D)
 
-
 -------------Aplicação------------------------
 
---Gestão de Products--
+---Gestão de Products---
 
 *getAllProducts: /product
-(TIP: para melhor testabilidade do professor este método carrega os produtos no banco de dados)
+(TIP: para agilidades nos testes do professor este método carrega os produtos no banco de dados)
 
 *createProduct: /product/
 --Exemplo:
@@ -34,10 +39,10 @@ MONGO: http://localhost:27017
 (TIP: salve o ID caso queira usar posteriormente)
 
 *getProductById: /product/:id
--Exemplo: produto/65aeffe53cb25a62bcec76f7
+-Exemplo: product/65aeffe53cb25a62bcec76f7
 
 *updateProductById: /product/:id
---Exemplo: produto/65aeffe53cb25a62bcec76f7
+--Exemplo: product/65aeffe53cb25a62bcec76f7
     {
         "name": "Sorvete Misto G",
         "options": [],
@@ -47,33 +52,40 @@ MONGO: http://localhost:27017
         "status": true
     }
 *deleteProductById: /product/:id
---Exemplo: produto/65aeffe53cb25a62bcec76f7
-Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa. 
-Para testar que está em uma order ativa adicione o produto no carrinho e o avance com a API receiveOrder,
+--Exemplo: product/65aeffe53cb25a62bcec76f7
+---Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa. 
+---Para testar que está em uma order ativa adicione o produto no carrinho e o avance com a API receiveOrder,
 neste momento o pedido esta ativo e o produto não poderá ser excluido
 
 *deactivateProductById: /product/deactive/:id
---Exemplo: produto/65aeffe53cb25a62bcec76f7
+--Exemplo: product/65aeffe53cb25a62bcec76f7
 Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa
 
 *getProductByCategory: /product/categoria/:categoria
---Exemplo: produto/combo; produto/lanche; produto/bebida; produto/sobremesa; produto/acompanhamento
-(TIP: EndPoint criado para filtro de products para composição do cart)
+--Exemplo: product/categoria/combo
+--Exemplo: product/categoria/lanche
+--Exemplo: product/categoria/bebida
+--Exemplo: product/categoria/sobremesa
+--Exemplo: product/categoria/acompanhamento
+(TIP: EndPoint criado para facilitar a consulta da categoria de products para montagem do cart)
 
---Gestão de Users--
+---Gestão de Users---
 USER
 *createUser: /users
 --Exemplo:
     {
         "cpf": "000.000.000-00",
-        "name": "Jessica",
-        "email": "jessica.jessica@example.com"
+        "name": "Professor",
+        "email": "professor@fiap.com"
     }
+(TIP: Copie o ID do createUser para usar nos próximos passos)
+
 *getUserById: /users/:id
 --Exemplo:
-    users/65ad86e5c8f936abc7bb2fb3 (TIP: Copie o ID do createUser e o insira na URL)
+    users/65ad86e5c8f936abc7bb2fb3
 
---Gestão de Cart--
+
+---Gestão de Cart---
 *createCart: /cart/
 (TIP: Copie o ID do cart para usar nos próximos passos)
 
@@ -90,7 +102,7 @@ query.param: produto
 *personalizeItens: /cart/itens/:id
 query.param: produto
 query.param: options
---Exemplo: /cart/itens/65b19e8f5fe107d74bd05ce0?product=65b1a124e453756a9567b9c7&observacoes=["Pão Australiano","Hamburguer","Queijo Emental","Alface Americana","Molho Tasty","Cebola","Tomate"]
+--Exemplo: /cart/itens/65b19e8f5fe107d74bd05ce0?product=65b1a124e453756a9567b9c7&options=["Pão com Gergelim","Hamburguer","Queijo Cheddar","Ketchup","Mostarda","Cebola","Picles"]
 
 *resumeCart: /cart/:id
 --Exemplo: /cart/65b19e8f5fe107d74bd05ce0
@@ -107,26 +119,26 @@ query.param: options
 *cancelCart: /cart/cancel/:id
 --Exemplo: /cart/cancel/65b19e8f5fe107d74bd05ce0
 
---Gestão de ORDER--
-receiveOrder: /order/receive/:id
+---Gestão de ORDER---
+*receiveOrder: /order/receive/:id
 --Exemplo: /order/receive/65b19e8f5fe107d74bd05ce0
 (TIP: Agora você esta manipulando a order. Copie e cole o id da order para sequencia das proximas)
 
-prepareOrder: /order/prepare/:id
+*prepareOrder: /order/prepare/:id
 --Exemplo: /order/prepare/65b1a8b7f56e976b1536bf52
 
-estimateDelivery: /order/estimate/:id
+*estimateDelivery: /order/estimate/:id
 --Exemplo: /order/prepare/65b1a8b7f56e976b1536bf52
 (Policies: Nesta etapa é validada a fila de pedidos ativos, diferente de closed e ready e somada as estimativas de preparo de todos os pedidos anteriores ao atual)
 
-updateStatusToReady: /order/update/ready/:id
+*updateStatusToReady: /order/update/ready/:id
 --Exemplo: /order/prepare/65b1a8b7f56e976b1536bf52
 
-updateStatusToDelivered: /order/update/delivered/:id
+*updateStatusToDelivered: /order/update/delivered/:id
 --Exemplo: /order/update/delivered/65b1a8b7f56e976b1536bf52
 
-updateStatusToClosed: /order/update/closed/:id
+*updateStatusToClosed: /order/update/closed/:id
 --Exemplo: /order/update/closed/65b1a8b7f56e976b1536bf52
 
-getAllActiveOrders: /order/
+*getAllActiveOrders: /order/
 
