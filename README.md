@@ -1,18 +1,20 @@
 # fiap_restaurante
 
 -------------Preparando o ambiente------------
-Executando em ambiente docker
--Passo 1: Intalação dependencias: npm install
+
+-Passo 1: Instalação dependencias: npm install
 -Passo 2: Build da Aplicação: npm run build
+
+Opção 1 - Executando em ambiente docker
 -Passo 3: Build da Imagem da Aplicação: docker build -t fiap/restaurante .
 -Passo 4: Run Banco de Dados + Imagem Aplicação: docker-compose -f docker-compose.yml up -d
 -Passo 5: Collection disponivel na raiz da pasta do projeto "fiap_restaurante.postman_collection.json"
 --Aplicação disponivel na porta 5000, mongo-express 8081 e mongo 27017
 
-Executando em ambiente local
--Passo 1: Altere o arquivo .env a variavel DB_CONN_STRING para "mongodb://root:MongoDB2019!@localhost:27017/"
--Passo 2: Suba o ambiente do docker compose para o banco de dados
--Passo 3: NPM RUN DEV
+Opção 2 - Executando em ambiente local
+-Passo 3: Altere o arquivo .env a variavel DB_CONN_STRING para "mongodb://root:MongoDB2019!@localhost:27017/"
+-Passo 4: Suba o ambiente do docker compose para o banco de dados
+-Passo 5: NPM RUN DEV
 
 -------------Testando a aplicação-------------
 -Collection Postman fiap_restaurante, esta divida em user, products, cart e order.
