@@ -1,0 +1,42 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurantedb
+spec:
+  selector:
+    matchLabels:
+      app: restaurantedb
+  
+  replicas: 1
+  
+  template:
+    metadata:
+      labels:
+        app: restaurantedb
+    spec:
+      containers:
+      - name: restaurantedb  # este é o nome do banco de dados para a aplicacao
+        image: mongo
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports: 
+          - containerPort: 27017
+            name: restaurantedb
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: restaurantedb
+spec:
+  selector:
+    app: restaurantedb
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
