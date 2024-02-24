@@ -27,5 +27,5 @@ export async function connectToDataBase()
     collections.product = productCollection;
     collections.user = userCollection;
 
-    console.log(`Sucesso`);
+    console.log(`Conexão :` + process.env.DB_CONN_STRING as string);
 }
