@@ -1,0 +1,10 @@
+kind: Service
+metadata:
+  name: svc-fiap-restaurente
+spec:
+  type: NodePort
+  ports:
+    - port: 5000
+      nodePort: 31100
+  selector:
+    app: fiap-restaurante
