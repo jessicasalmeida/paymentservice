@@ -1,0 +1,24 @@
+# https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurante-db
+spec:
+  selector:
+    matchLabels:
+      app: restaurante-db
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container:  restaurante-db
+      labels:
+        app: restaurante-db
+    spec:
+      containers:
+      - name: restaurante-db
+        image: mongo
+        ports: 
+          - containerPort: 27017
+            name: "restaurante-db"
+

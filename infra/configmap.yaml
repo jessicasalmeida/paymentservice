@@ -5,7 +5,7 @@ metadata:
   labels:
     name: db-config
 data:
-  DB_CONN_STRING: mongodb://svc-fiap-restaurante-bd:27017
+  DB_CONN_STRING: mongodb://svc-restaurante-db:27017
   DB_NAME: restaurante_db
   CART_COLLECTION_NAME: cart
   ORDER_COLLECTION_NAME: order
