@@ -1,0 +1,10 @@
+{
+    "auths": {
+        "meuregistroprivado.com":{
+            "username":"user",
+            "password": "senha",
+            "email": "email",
+            "auth": "<base64-enconded-auth"
+        }
+    }
+}

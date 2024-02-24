@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { ParamsDictionary } from "express-serve-static-core";
 import {Get, Route} from "tsoa";
-import {cartService} from "../../../core/applications/services/cart-service";
+import {cartService} from "../../core/applications/services/cart-service";
 
 export class cartController {
     constructor(private readonly cartService: cartService) { }

@@ -1,6 +1,6 @@
 import express, {Router} from "express";
 import {productRepositoryBd} from "../../driven/infra/product-repository-bd";
-import {cartRepositoryMongoBd} from "../../driven/infra/cart-repository-mongo-bd";
+import {cartRepositoryMongoBd} from "../../../data/data-sources/mongodb/cart-repository-mongo-bd";
 import {orderRepositoryMongoBd} from "../../driven/infra/order-repository-mongo-bd";
 import {productService} from "../../../core/applications/services/product-service";
 import {productController} from "../controllers/product-controller";

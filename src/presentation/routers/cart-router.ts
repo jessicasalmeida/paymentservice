@@ -1,9 +1,9 @@
 import express, {Router} from "express";
-import {cartService} from "../../../core/applications/services/cart-service";
+import {cartService} from "../../core/applications/services/cart-service";
 import {cartController} from "../controllers/cart-controller";
-import {userRepositoryMongoBd} from "../../driven/infra/user-repository-mongo-bd";
-import {productRepositoryBd} from "../../driven/infra/product-repository-bd";
-import {cartRepositoryMongoBd} from "../../driven/infra/cart-repository-mongo-bd";
+import {userRepositoryMongoBd} from "../../data/data-sources/mongodb/user-repository-mongo-bd";
+import {productRepositoryBd} from "../../data/data-sources/mongodb/product-repository-bd";
+import {cartRepositoryMongoBd} from "../../data/data-sources/mongodb/cart-repository-mongo-bd";
 
 const userRepository = new userRepositoryMongoBd();
 const productRepository = new productRepositoryBd();

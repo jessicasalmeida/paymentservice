@@ -1,0 +1,10 @@
+{
+    "auths": {
+        "<nome-do-registry>.azurecr.": {
+            "username":"",
+            "password": "",
+            "email": "",
+            "auth": "<base64-enconded--auth"
+        }
+    }
+}

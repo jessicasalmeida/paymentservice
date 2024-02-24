@@ -1,4 +1,4 @@
-import {cartRepositoryMongoBd} from "../../driven/infra/cart-repository-mongo-bd";
+import {cartRepositoryMongoBd} from "../../../data/data-sources/mongodb/cart-repository-mongo-bd";
 import {orderRepositoryMongoBd} from "../../driven/infra/order-repository-mongo-bd";
 import {orderService} from "../../../core/applications/services/order-service";
 import {orderController} from "../controllers/order-controller";
