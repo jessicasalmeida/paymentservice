@@ -13,6 +13,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@kubernetes/client-node": "^0.20.0",
     "@types/axios": "^0.14.0",
     "axios": "^1.6.5",
     "dotenv": "^16.3.2",
