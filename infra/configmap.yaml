@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+  labels:
+    name: db-config
+data:
+  DB_CONN_STRING: mongodb://svc-fiap-restaurante-bd:27017
+  DB_NAME: restaurante_db
+  CART_COLLECTION_NAME: cart
+  ORDER_COLLECTION_NAME: order
+  PRODUCT_COLLECTION_NAME: produtos
+  USER_COLLECTION_NAME: user

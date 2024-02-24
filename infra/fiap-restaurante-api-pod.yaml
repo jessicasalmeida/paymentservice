@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fiap-restaurante-api-pod
+  labels:
+    app: fiap-restaurante-api-pod
+    instance: app-instance-1
+  annotations:
+    autor: "Jessica"
+    app-version: 1.0.0
+spec:
+  containers:
+    - name: fiap-restaurante-api-pod
+      image: jessicasalmeida/restaurante:1.0.0
+      ports:
+        - containerPort: 5000
+      env:
+        - name: DB_CONN_STRING
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: DB_CONN_STRING
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: DB_NAME
+        - name: CART_COLLECTION_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: CART_COLLECTION_NAME
+        - name: ORDER_COLLECTION_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: ORDER_COLLECTION_NAME
+        - name: PRODUCT_COLLECTION_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: PRODUCT_COLLECTION_NAME
+        - name: USER_COLLECTION_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-config
+              key: USER_COLLECTION_NAME
