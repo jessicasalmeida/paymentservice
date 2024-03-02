@@ -1,10 +1,19 @@
-import userResponseModel from "./user";
-import product from "./product";
+import { ProductResponseModel } from "./product";
+import { userResponseModel } from "./user";
 
-export default interface cart {
+export interface CartRequestModel {
+    user: userResponseModel;
+    products: Array<ProductResponseModel>;
+    totalValue: number;
+    status: string;
+    payment: boolean;
+}
+
+
+export interface CartResponseModel {
     _id?: string;
     user: userResponseModel;
-    products: Array<product>;
+    products: Array<ProductResponseModel>;
     totalValue: number;
     status: string;
     payment: boolean;

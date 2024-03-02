@@ -1,13 +1,18 @@
- import {CartRepository} from "../../../domain/interfaces/repositories/cart-repository";
-import order from "../../domain/order";
-import {orderRepository} from "../ports/order-repository";
-import {ObjectId} from "mongodb";
+import { OrderUseCase } from '../interfaces/use-cases/order-use-case';
+import { OrderResponseModel } from '../models/order';
+import { OrderRepository } from '../interfaces/repositories/order-repository';
+import { CartUseCaseImpl } from './cart-use-case';
+import { CartRepository } from '../interfaces/repositories/cart-repository';
 
-export class orderService {
-    constructor(private readonly orderRepository: orderRepository,
-                private readonly cartRepository: CartRepository) { }
+export class OrderUseCaseImpl implements OrderUseCase{
+    orderRepository: OrderRepository
+    cartRepository: CartRepository
+    constructor( orderRepository: OrderRepository, cartRepository: CartRepository){
+        this.orderRepository = orderRepository
+        this.cartRepository = cartRepository
+    }
 
-    async receiveOrder(idCart: string): Promise<order> {
+    async receiveOrder(idCart: string): Promise<OrderResponseModel> {
         const status = "RECEIVED";
         let estimatedDelivery: number = await this.estimatedDelivery(idCart);
         const ordersReceived = (await this.getAllActiveOrders()).filter(value =>
@@ -17,19 +22,18 @@ export class orderService {
             estimatedDelivery += await this.estimatedDelivery(value.idCart);
         }
         const order = {
-            _id: new ObjectId(),
             idCart: idCart,
             receiveDate: new Date(),
             deliveryTime: estimatedDelivery,
             status: status
         };
-        return this.orderRepository.receiveOrder(order);
+        return this.orderRepository.createOrder(order);
     }
 
-    async prepareOrder(idOrder: string): Promise<order> {
+    async prepareOrder(idOrder: string): Promise<OrderResponseModel> {
         const order = await this.orderRepository.findOrderById(idOrder);
         order.status = "PREPARING";
-        return this.orderRepository.updateOrder(order);
+        return this.orderRepository.updateOrder(idOrder, order);
     }
 
     async estimateDelivery(idOrder: string): Promise<string>{
@@ -46,27 +50,30 @@ export class orderService {
     async updateStatusToReady(idOrder: string): Promise<string> {
         const order = await this.orderRepository.findOrderById(idOrder);
         order.status = "READY";
-        return await this.sendNotificationDelivery(idOrder);
+        await this.orderRepository.updateOrder(idOrder, order);
+        return this.sendNotificationDelivery(idOrder);
     }
 
-    async updateStatusToDelivered(idOrder: string): Promise<order> {
+    async updateStatusToDelivered(idOrder: string): Promise<OrderResponseModel> {
         const order = await this.orderRepository.findOrderById(idOrder);
         order.status = "DELIVERED";
-        return this.orderRepository.updateOrder(order);
+        return this.orderRepository.updateOrder(idOrder, order);
     }
 
-    async updateStatusToClosed(idOrder: string): Promise<order> { const order = await this.orderRepository.findOrderById(idOrder);
+    async updateStatusToClosed(idOrder: string): Promise<OrderResponseModel> { const order = await this.orderRepository.findOrderById(idOrder);
         order.status = "CLOSED";
-        return this.orderRepository.updateOrder(order);
+        return this.orderRepository.updateOrder(idOrder, order);
     }
-    async getAllActiveOrders(): Promise<order[]>
+    async getAllActiveOrders(): Promise<OrderResponseModel[]>
     {
-        return this.orderRepository.getActiveOrders();
+        const result = await this.orderRepository.getAllOrders();
+        return result.filter((p) => p.status !== "CLOSED" && p.status !== "DELIVERED")
+        
     }
 
     private async estimatedDelivery(idCart: string): Promise<number>
     {
-        const cart = Object.assign({}, await this.cartRepository.findCartById(idCart));
+        const cart = Object.assign({}, await this.cartRepository.getOne(idCart));
         return cart.products.reduce((sum: any, p: { timeToPrepare: any; }) => sum + p.timeToPrepare, 0);
     }
-} 
+}

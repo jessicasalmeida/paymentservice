@@ -1,37 +1,32 @@
-import {orderRepository} from "../../../core/applications/ports/order-repository";
-import order from "../../../core/domain/order";
-import {Int32, ObjectId} from "mongodb";
+import {ObjectId} from "mongodb";
 import {collections} from "./db-connect";
+import { OrderDataSource } from "../../interfaces/data-sources/order-data-source";
+import { OrderRequestModel, OrderResponseModel } from "../../../domain/models/order";
 
-export class orderRepositoryMongoBd implements orderRepository {
+export class OrderRepositoryMongoBd implements OrderDataSource {
 
-    async receiveOrder(order: order): Promise<order> {
+    async create(order: OrderRequestModel): Promise<OrderResponseModel> {
         await collections.orders?.insertOne(order);
         return order;
     }
 
-    async updateOrder(order: order): Promise<order> {
-        const query = { _id: new ObjectId(order._id)};
+    async update(id: string, order: OrderRequestModel): Promise<OrderResponseModel> {
+        const query = { _id: new ObjectId(id)};
         await collections.orders?.updateOne(query, {$set: order});
         return order;
     }
-    async getActiveOrders(): Promise<order[]> {
-        const query = { $and: [ {status: {$not: {$eq:"CLOSED"}}}, {status: {$not: {$eq:"DELIVERED"}}}]};
-        const orders = await collections.orders?.find(query).toArray() as order[];
-        return orders;
+   
+    async getAll(): Promise<OrderResponseModel[]> {
+        return await collections.orders?.find({}).toArray() as unknown as OrderResponseModel[];
     }
 
-    async getAllOrders(): Promise<order[]> {
-        return await collections.orders?.find({}).toArray() as order[];
-    }
-
-    async findOrderById(id: string) : Promise<order>
+    async findOne(id: string) : Promise<OrderResponseModel>
     {
         const query = { _id: new ObjectId(id)};
         const order = await collections.orders?.findOne(query);
         if (!order) {
             throw new Error(`Order with id ${id} not found`);
         }
-        return order;
+        return order as unknown as OrderResponseModel;
     }
 }

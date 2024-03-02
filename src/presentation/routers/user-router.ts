@@ -1,14 +1,12 @@
 import express, {Router} from "express";
 import {userController} from "../controllers/user-controller";
 import { userRepositoryMongoBd } from "../../data/data-sources/mongodb/user-repository-mongo-bd";
-import userRepositoryImpl from "../../domain/repositories/UserRepositoryImpl";
-import { getOneUser } from "../../domain/use-cases/user/get-one-user";
-import { createUser } from "../../domain/use-cases/user/create-user";
+import userRepositoryImpl from "../../domain/repositories/user-repository";
+import { UserUseCaseImpl } from "../../domain/use-cases/user-use-case";
 
 const userRepository = new userRepositoryMongoBd();
 const userC = new userController(
-    new createUser(new userRepositoryImpl(userRepository)),
-    new getOneUser(new userRepositoryImpl(userRepository)));
+    new UserUseCaseImpl(new userRepositoryImpl(userRepository)));
 
 export const userRouter = Router();
 

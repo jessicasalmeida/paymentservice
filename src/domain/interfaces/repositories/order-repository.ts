@@ -1,9 +1,8 @@
-import user from "../../models/order";
+import { OrderRequestModel, OrderResponseModel } from "../../models/order";
 
-export interface orderRepository {
-    receiveOrder(order: order): Promise<order>;
-    updateOrder(order: order) : Promise<order>;
-    getActiveOrders(): Promise<order[]>;
-    getAllOrders(): Promise<order[]>;
-    findOrderById(idOrder: string): Promise<order>;
+export interface OrderRepository {
+    createOrder(order: OrderRequestModel): Promise<OrderResponseModel>;
+    updateOrder(id: string, order: OrderResponseModel) : Promise<OrderResponseModel>;
+    getAllOrders(): Promise<OrderResponseModel[]>;
+    findOrderById(idOrder: string): Promise<OrderResponseModel>;
 }

@@ -1,15 +1,13 @@
 import { Request, Response } from 'express';
-import { createUserUseCase } from '../../domain/interfaces/use-cases/create-user-use-case';
-import { getOneUserUseCase } from '../../domain/interfaces/use-cases/get-one-user-use-case';
+import { UserUseCase } from '../../domain/interfaces/use-cases/user-use-case';
 
 export class userController {        
-        constructor(private readonly createUserUseCase:createUserUseCase,
-            private readonly getOneUserUseCase:getOneUserUseCase) { }
+        constructor(private readonly userUseCase:UserUseCase) { }
 
     async getUserById(req: Request, res: Response) {
         try {
             const id = req.params.id;
-            const user = await this.getOneUserUseCase.execute(id);
+            const user = await this.userUseCase.executeGetOne(id);
             res.status(200).json(user);
         } catch (error) {
             res.status(500).send({message: "Error fetching data. " + error})
@@ -18,7 +16,7 @@ export class userController {
     async createUser(req: Request, res: Response) {
         try {
         const newUser= req.body;
-        const user = await this.createUserUseCase.execute(newUser);
+        const user = await this.userUseCase.executeCreate(newUser);
         res.status(200).json(user);
         } catch (error) {
             res.status(500).send({message: "Error creating data. " + error})

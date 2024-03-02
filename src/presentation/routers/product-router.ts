@@ -1,16 +1,22 @@
 import express, {Router} from "express";
-import {productRepositoryBd} from "../../driven/infra/product-repository-bd";
-import {cartRepositoryMongoBd} from "../../../data/data-sources/mongodb/cart-repository-mongo-bd";
-import {orderRepositoryMongoBd} from "../../driven/infra/order-repository-mongo-bd";
-import {productService} from "../../../core/applications/services/product-service";
-import {productController} from "../controllers/product-controller";
 
-const productRepository = new productRepositoryBd();
-const cartRepository = new cartRepositoryMongoBd();
-const orderRepository = new orderRepositoryMongoBd();
+import {ProductController} from "../controllers/product-controller";
+import ProductRepositoryImpl from "../../domain/repositories/product-repository";
+import { ProductUseCaseImpl } from "../../domain/use-cases/product-use-case";
 
-const productS = new productService(productRepository,orderRepository, cartRepository);
-const productC = new productController(productS);
+import { ProductRepositoryMongoBd } from "../../data/data-sources/mongodb/product-repository-mongo-bd";
+import { OrderRepositoryMongoBd } from "../../data/data-sources/mongodb/order-repository-mongo-bd";
+import { CartRepositoryMongoBd } from "../../data/data-sources/mongodb/cart-repository-mongo-bd";
+import { OrderRepositoryImpl } from '../../domain/repositories/order-repository';
+import CartRepositoryImpl from "../../domain/repositories/cart-repository";
+
+const productRepository = new ProductRepositoryMongoBd();
+const orderRepository = new OrderRepositoryMongoBd();
+const cartRepository = new CartRepositoryMongoBd();
+
+const productR = new ProductRepositoryImpl(productRepository);
+const productUC = new ProductUseCaseImpl(productR, new OrderRepositoryImpl(orderRepository), new CartRepositoryImpl(cartRepository));
+const productC = new ProductController(productUC);
 
 export const productRouter = Router();
 

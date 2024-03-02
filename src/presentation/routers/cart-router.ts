@@ -1,15 +1,20 @@
 import express, {Router} from "express";
-import {cartService} from "../../core/applications/services/cart-service";
-import {cartController} from "../controllers/cart-controller";
+import {CartController} from "../controllers/cart-controller";
 import {userRepositoryMongoBd} from "../../data/data-sources/mongodb/user-repository-mongo-bd";
-import {productRepositoryBd} from "../../data/data-sources/mongodb/product-repository-bd";
-import {cartRepositoryMongoBd} from "../../data/data-sources/mongodb/cart-repository-mongo-bd";
+import {ProductRepositoryMongoBd} from "../../data/data-sources/mongodb/product-repository-mongo-bd";
+import {CartRepositoryMongoBd} from "../../data/data-sources/mongodb/cart-repository-mongo-bd";
+import { CartUseCaseImpl } from '../../domain/use-cases/cart-use-case';
+import CartRepositoryImpl from "../../domain/repositories/cart-repository";
+import userRepositoryImpl from "../../domain/repositories/user-repository";
+import ProductRepositoryImpl from "../../domain/repositories/product-repository";
 
+const productRepository = new ProductRepositoryMongoBd();
+const cartRepository = new CartRepositoryMongoBd();
 const userRepository = new userRepositoryMongoBd();
-const productRepository = new productRepositoryBd();
-const cartRepository = new cartRepositoryMongoBd();
-const cartS = new cartService(cartRepository, productRepository, userRepository);
-const cartC = new cartController(cartS);
+
+const cartR = new CartRepositoryImpl(cartRepository);
+const cartUC = new CartUseCaseImpl(cartR, new userRepositoryImpl(userRepository), new ProductRepositoryImpl(productRepository));
+const cartC = new CartController(cartUC);
 
 export const cartRouter = Router();
 

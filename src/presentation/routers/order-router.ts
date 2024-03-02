@@ -1,15 +1,18 @@
-import {cartRepositoryMongoBd} from "../../../data/data-sources/mongodb/cart-repository-mongo-bd";
-import {orderRepositoryMongoBd} from "../../driven/infra/order-repository-mongo-bd";
-import {orderService} from "../../../core/applications/services/order-service";
-import {orderController} from "../controllers/order-controller";
+import { OrderRepositoryImpl } from "../../domain/repositories/order-repository";
 import express, {Router} from "express";
+import { OrderRepositoryMongoBd } from '../../data/data-sources/mongodb/order-repository-mongo-bd';
+import { OrderUseCaseImpl } from "../../domain/use-cases/order-use-case";
+import CartRepositoryImpl from "../../domain/repositories/cart-repository";
+import { CartRepositoryMongoBd } from "../../data/data-sources/mongodb/cart-repository-mongo-bd";
+import { OrderController } from "../controllers/order-controller";
 
-const cartRepository = new cartRepositoryMongoBd();
-const orderRepository = new orderRepositoryMongoBd();
+const cartRepository = new CartRepositoryMongoBd();
+const orderRepository = new OrderRepositoryMongoBd();
 
-const orderS = new orderService(orderRepository, cartRepository);
+const orderR = new OrderRepositoryImpl(orderRepository);
+const orderUC = new OrderUseCaseImpl(orderR, new CartRepositoryImpl(cartRepository));
+const orderC = new OrderController(orderUC);
 
-const orderC = new orderController(orderS);
 export const orderRouter = Router();
 
 orderRouter.use(express.json());
