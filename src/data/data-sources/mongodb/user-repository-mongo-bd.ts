@@ -1,21 +1,20 @@
-import {userRepository} from "../../../core/applications/ports/user-repository";
-import user from "../../../core/domain/user";
 import {ObjectId} from "mongodb";
 import {collections} from "./db-connect";
+import UserDataSource from "../../interfaces/data-sources/user-data-source";
+import { userRequestModel, userResponseModel } from "../../../domain/models/user";
 
-export class userRepositoryMongoBd implements userRepository {
+    export class userRepositoryMongoBd implements UserDataSource{
 
-    async getUserById(id: string): Promise<user> {
+    async create(user: userRequestModel): Promise<userResponseModel | null> {
+        await collections.user?.insertOne(user);
+        return user;
+    }
+    async getOne(id: string): Promise<userResponseModel | null> {
         const query = { _id: new ObjectId(id)};
-        const user = await collections.user?.findOne(query) as user;
+        const user = await collections.user?.findOne(query);
         if (!user) {
             throw new Error(`User with id ${id} not found`);
         }
-        return user;
-    }
-
-    async createUser(newUser: user): Promise<user> {
-        await collections.user?.insertOne(newUser);
-        return  newUser;
+        return user as unknown as userResponseModel;
     }
 }

@@ -1,10 +1,10 @@
-
+/* 
 import product from "../../domain/product";
 import {productRepository} from "../ports/product-repository";
 import {orderRepository} from "../ports/order-repository";
-import {cartRepository} from "../ports/cart-repository";
+import {cartRepository} from "../../../domain/interfaces/repositories/cart-repository";
 import {ObjectId} from "mongodb";
-import cart from "../../domain/cart";
+import cart from "../../../domain/models/cart";
 
 export class productService {
     constructor(private readonly productRepository: productRepository,
@@ -56,6 +56,7 @@ export class productService {
 
     async verifyActiveOrder(id: string): Promise<boolean>
     {
+        
         const idProduct = new ObjectId(id);
         const orders = await this.orderRepository.getActiveOrders();
         let products = {} as product[];
@@ -68,4 +69,4 @@ export class productService {
         }
         return false;
     }
-}
+} */

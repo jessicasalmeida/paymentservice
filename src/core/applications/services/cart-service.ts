@@ -1,5 +1,5 @@
-import {cartRepository} from "../ports/cart-repository";
-import cart from "../../domain/cart";
+/* import {cartRepository} from "../../../domain/interfaces/repositories/cart-repository";
+import cart from "../../../domain/models/cart";
 import user from "../../domain/user";
 import product from "../../domain/product";
 import {productRepository} from "../ports/product-repository";
@@ -104,4 +104,4 @@ export class cartService {
         }
         return  product.price;
     }
-}
+} */

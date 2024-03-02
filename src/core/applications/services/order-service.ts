@@ -1,4 +1,4 @@
-import {cartRepository} from "../ports/cart-repository";
+/* import {cartRepository} from "../../../domain/interfaces/repositories/cart-repository";
 import order from "../../domain/order";
 import {orderRepository} from "../ports/order-repository";
 import {ObjectId} from "mongodb";
@@ -69,4 +69,4 @@ export class orderService {
         const cart = Object.assign({}, await this.cartRepository.findCartById(idCart));
         return cart.products.reduce((sum: any, p: { timeToPrepare: any; }) => sum + p.timeToPrepare, 0);
     }
-}
+} */

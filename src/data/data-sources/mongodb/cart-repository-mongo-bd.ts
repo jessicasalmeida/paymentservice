@@ -1,5 +1,5 @@
-import {cartRepository} from "../../../core/applications/ports/cart-repository";
-import cart from "../../../core/domain/cart";
+import {cartRepository} from "../../../domain/interfaces/repositories/cart-repository";
+import cart from "../../../domain/models/cart";
 import {collections} from "./db-connect";
 import {ObjectId} from "mongodb";
 
