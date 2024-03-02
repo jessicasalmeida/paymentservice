@@ -1,5 +1,5 @@
 import express, {Router} from "express";
-import {userController} from "../controllers/user-controller";
+import {userController} from "../../operation/controllers/user-controller";
 import { userRepositoryMongoBd } from "../../data/data-sources/mongodb/user-repository-mongo-bd";
 import userRepositoryImpl from "../../domain/repositories/user-repository";
 import { UserUseCaseImpl } from "../../domain/use-cases/user-use-case";

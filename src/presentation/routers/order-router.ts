@@ -4,7 +4,7 @@ import { OrderRepositoryMongoBd } from '../../data/data-sources/mongodb/order-re
 import { OrderUseCaseImpl } from "../../domain/use-cases/order-use-case";
 import CartRepositoryImpl from "../../domain/repositories/cart-repository";
 import { CartRepositoryMongoBd } from "../../data/data-sources/mongodb/cart-repository-mongo-bd";
-import { OrderController } from "../controllers/order-controller";
+import { OrderController } from "../../operation/controllers/order-controller";
 
 const cartRepository = new CartRepositoryMongoBd();
 const orderRepository = new OrderRepositoryMongoBd();

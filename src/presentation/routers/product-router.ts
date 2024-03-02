@@ -1,6 +1,6 @@
 import express, {Router} from "express";
 
-import {ProductController} from "../controllers/product-controller";
+import {ProductController} from "../../operation/controllers/product-controller";
 import ProductRepositoryImpl from "../../domain/repositories/product-repository";
 import { ProductUseCaseImpl } from "../../domain/use-cases/product-use-case";
 
