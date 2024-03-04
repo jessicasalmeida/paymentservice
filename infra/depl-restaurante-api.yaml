@@ -63,6 +63,13 @@ spec:
                 configMapKeyRef:
                   name: db-config
                   key: DB_NAME
+          volumeMounts:   
+            - name: mongodb-pvc
+              mountPath: /data/db 
+      volumes:
+        - name: mongodb-pvc
+          persistentVolumeClaim:
+            claimName: mongodb-pvc
             
 ---
 

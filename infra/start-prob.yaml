@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: prob-start
+spec:
+  containers:
+    - name: restaurante
+      image: jessicasalmeida/restaurante:1.0.0
+      ports:
+        - containerPort: 3000
+      startupProbe:
+        httpGet:
+          path: /health
+          port: 3000
+        failureThreshold: 30
+        periodSeconds: 10

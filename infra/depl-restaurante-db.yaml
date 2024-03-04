@@ -25,6 +25,13 @@ spec:
         ports: 
           - containerPort: 27017
             name: restaurantedb
+        volumeMounts:   
+          - name: mongodb-pvc
+            mountPath: /data/db 
+      volumes:
+        - name: mongodb-pvc
+          persistentVolumeClaim:
+            claimName: mongodb-pvc
 
 ---
 

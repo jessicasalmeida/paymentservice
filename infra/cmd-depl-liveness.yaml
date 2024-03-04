@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: liveness-cmd
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cmd
+  template:
+    metadata:
+      labels:
+        app: cmd
+    spec:
+      containers:
+      - name: restaurante
+        image: jessicasalmeida/restaurante:1.0.0
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          exec:
+            command:
+            - ls
+            - /var/www/html   
+          initialDelaySeconds: 10
+          periodSeconds: 30

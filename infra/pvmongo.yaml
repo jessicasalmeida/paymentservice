@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongopode-pv
+  labels:
+    name: mongopode-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage-db
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: C:\Users\gjess\Documents\Restaurante\fiap_restaurante\data
