@@ -13,4 +13,4 @@ spec:
   storageClassName: local-storage-db
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: C:\Users\gjess\Documents\Restaurante\fiap_restaurante\infra
+    path: C:\mnt\data
