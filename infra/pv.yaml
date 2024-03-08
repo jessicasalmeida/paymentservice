@@ -13,4 +13,4 @@ spec:
   storageClassName: local-storage-db
   persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: C:\mnt\data
+    path: /run/desktop/mnt/host/c/mnt/data
