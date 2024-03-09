@@ -8,5 +8,5 @@ export const routes = express.Router();
 
 routes.use("/product", productRouter);
 routes.use("/user", userRouter);
-routes.use("/cart", cartRouter);
-routes.use("/order", orderRouter);
+//routes.use("/cart", cartRouter);
+//routes.use("/order", orderRouter);

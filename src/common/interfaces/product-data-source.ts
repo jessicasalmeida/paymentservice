@@ -1,9 +1,9 @@
-import { ProductRequestModel, ProductResponseModel } from '../../../domain/models/product';
+import { ProductDTO } from '../dtos/product.dto';
 
 export default interface ProductDataSource {
-    getOne(id: string): Promise<ProductResponseModel>;
-    create(product: ProductRequestModel) : Promise<ProductResponseModel>;
+    getOne(id: string): Promise<ProductDTO>;
+    create(product: ProductDTO) : Promise<ProductDTO>;
     delete(id: string): Promise<boolean>;
-    update(id:string, product: ProductRequestModel): Promise<ProductResponseModel>;
-    getAll(): Promise<ProductResponseModel[]>;
+    update(id:string, product: ProductDTO): Promise<ProductDTO>;
+    getAll(): Promise<ProductDTO[]>;
 }

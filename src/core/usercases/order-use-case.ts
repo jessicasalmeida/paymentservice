@@ -1,79 +1,119 @@
-import { OrderUseCase } from '../interfaces/use-cases/order-use-case';
-import { OrderResponseModel } from '../models/order';
-import { OrderRepository } from '../interfaces/repositories/order-repository';
-import { CartUseCaseImpl } from './cart-use-case';
-import { CartRepository } from '../interfaces/repositories/cart-repository';
+import { OrderGateway } from "../../operation/gateways/order";
+import { OrderEntity } from "../entities/order";
+import { CartGateway } from '../../operation/gateways/cart';
+import { generateRandomString } from "../../common/helpers/generators";
 
-export class OrderUseCaseImpl implements OrderUseCase{
-    orderRepository: OrderRepository
-    cartRepository: CartRepository
-    constructor( orderRepository: OrderRepository, cartRepository: CartRepository){
-        this.orderRepository = orderRepository
-        this.cartRepository = cartRepository
-    }
+export class OrderUseCase {
 
-    async receiveOrder(idCart: string): Promise<OrderResponseModel> {
+    static async receiveOrder(idCart: string, orderGateway: OrderGateway, cartGateway:CartGateway): Promise<OrderEntity| null> {
         const status = "RECEIVED";
-        let estimatedDelivery: number = await this.estimatedDelivery(idCart);
-        const ordersReceived = (await this.getAllActiveOrders()).filter(value =>
-            (value.status == "RECEIVED" || value.status == "PREPARING")
-            && Date.now().valueOf() >= value.receiveDate.valueOf());
-        for (const value of ordersReceived) {
-            estimatedDelivery += await this.estimatedDelivery(value.idCart);
+        let estimatedDelivery: number = await OrderUseCase.estimatedDelivery(idCart, cartGateway);
+        const ordersReceived = (await OrderUseCase.getAllActiveOrders(orderGateway));
+        if (ordersReceived) {
+            ordersReceived.filter(value =>
+                (value.status == "RECEIVED" || value.status == "PREPARING")
+                && Date.now().valueOf() >= value.receiveDate.valueOf());
+            for (const value of ordersReceived) {
+                estimatedDelivery += await OrderUseCase.estimatedDelivery(value.idCart, cartGateway);
+            }
         }
-        const order = {
-            idCart: idCart,
-            receiveDate: new Date(),
-            deliveryTime: estimatedDelivery,
-            status: status
-        };
-        return this.orderRepository.createOrder(order);
+        const novoId = generateRandomString();
+
+        const order = new OrderEntity(
+            novoId,
+            idCart,
+            new Date(),
+            estimatedDelivery,
+            status
+        );
+        const nOrder = orderGateway.createorder(order);
+        if(nOrder)
+        {
+            return nOrder;
+        }
+        else{
+            return null;
+        }
     }
 
-    async prepareOrder(idOrder: string): Promise<OrderResponseModel> {
-        const order = await this.orderRepository.findOrderById(idOrder);
-        order.status = "PREPARING";
-        return this.orderRepository.updateOrder(idOrder, order);
+    static async prepareOrder(idOrder: string, orderGateway: OrderGateway): Promise<OrderEntity | null> {
+        const order = await orderGateway.getOne(idOrder);
+        if (order) {
+            order.status = "PREPARING";
+            return orderGateway.update(idOrder, order);
+        }
+        else {
+            return null
+        }
     }
 
-    async estimateDelivery(idOrder: string): Promise<string>{
-        const order = await this.orderRepository.findOrderById(idOrder);
-        let estimatedDelivery = new Date((order.receiveDate.getTime() + order.deliveryTime*60000));
-        return `The estimate time to order is ready is ${estimatedDelivery}`;
+    static async estimateDelivery(idOrder: string, orderGateway: OrderGateway): Promise<string> {
+        const order = await orderGateway.getOne(idOrder);
+        if (order) {
+            let estimatedDelivery = new Date((order.receiveDate.getTime() + order.deliveryTime * 60000));
+            return `The estimate time to order is ready is ${estimatedDelivery}`;
+        }
+        else {
+            return "Order não encontrada";
+        }
     }
 
-    async sendNotificationDelivery(idOrder: string): Promise<string> {
-        await this.orderRepository.findOrderById(idOrder);
-        return `The order is ready to delivery`;
+    static async sendNotificationDelivery(idOrder: string, orderGateway: OrderGateway): Promise<string> {
+        const order = await orderGateway.getOne(idOrder);
+        if (order) {
+            return `The order is ready to delivery`;
+        }
+        else {
+            return "Order não encontrada";
+        }
     }
 
-    async updateStatusToReady(idOrder: string): Promise<string> {
-        const order = await this.orderRepository.findOrderById(idOrder);
-        order.status = "READY";
-        await this.orderRepository.updateOrder(idOrder, order);
-        return this.sendNotificationDelivery(idOrder);
+    static async updateStatusToReady(idOrder: string, orderGateway: OrderGateway): Promise<string> {
+        const order = await orderGateway.getOne(idOrder);
+        if (order) {
+            order.status = "READY";
+            await orderGateway.update(idOrder, order);
+            return OrderUseCase.sendNotificationDelivery(idOrder, orderGateway);
+        }
+        else {
+            return "Ordem não encontrada";
+        }
     }
 
-    async updateStatusToDelivered(idOrder: string): Promise<OrderResponseModel> {
-        const order = await this.orderRepository.findOrderById(idOrder);
-        order.status = "DELIVERED";
-        return this.orderRepository.updateOrder(idOrder, order);
+    static async updateStatusToDelivered(idOrder: string, orderGateway: OrderGateway): Promise<OrderEntity | null> {
+        const order = await orderGateway.getOne(idOrder);
+        if (order) {
+            order.status = "DELIVERED";
+            return orderGateway.update(idOrder, order);
+        }
+        else {
+            return null;
+        }
     }
 
-    async updateStatusToClosed(idOrder: string): Promise<OrderResponseModel> { const order = await this.orderRepository.findOrderById(idOrder);
-        order.status = "CLOSED";
-        return this.orderRepository.updateOrder(idOrder, order);
+    static async updateStatusToClosed(idOrder: string, orderGateway: OrderGateway): Promise<OrderEntity | null> {
+        const order = await orderGateway.getOne(idOrder);
+        if (order) {
+            order.status = "CLOSED";
+            return orderGateway.update(idOrder, order);
+        }
+        else {
+            return null;
+        }
     }
-    async getAllActiveOrders(): Promise<OrderResponseModel[]>
-    {
-        const result = await this.orderRepository.getAllOrders();
-        return result.filter((p) => p.status !== "CLOSED" && p.status !== "DELIVERED")
-        
+    static async getAllActiveOrders(orderGateway: OrderGateway): Promise<OrderEntity[] | null> {
+        const result = await orderGateway.getAll();
+        if (result) {
+            return result.filter((p) => p.status !== "CLOSED" && p.status !== "DELIVERED")
+        }
+        else {
+            return null;
+        }
+
     }
 
-    private async estimatedDelivery(idCart: string): Promise<number>
-    {
-        const cart = Object.assign({}, await this.cartRepository.getOne(idCart));
+    private static async estimatedDelivery(idCart: string, cartGateway: CartGateway): Promise<number> {
+        const cart = Object.assign({}, await cartGateway.getOne(idCart));
         return cart.products.reduce((sum: any, p: { timeToPrepare: any; }) => sum + p.timeToPrepare, 0);
     }
 }

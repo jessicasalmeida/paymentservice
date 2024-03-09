@@ -24,6 +24,6 @@ export class CartRepositoryMongoBd implements CartDataSource {
         {
             throw new Error(`Cart with id ${id} not found`);
         }
-        return cart as unknown as CartDTO;
+        return cart as CartDTO;
     }
 }

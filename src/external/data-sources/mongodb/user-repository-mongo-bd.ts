@@ -10,7 +10,7 @@ import { UserDTO } from "../../../common/dtos/user.dto";
         return user;
     }
     async getOne(id: string): Promise<UserDTO | null> {
-        const query = { _id: new ObjectId(id)};
+        const query = { id: id};
         const user = await collections.user?.findOne(query);
         if (!user) {
             throw new Error(`User with id ${id} not found`);

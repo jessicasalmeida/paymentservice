@@ -1,8 +1,8 @@
-import { OrderRequestModel, OrderResponseModel } from '../../../domain/models/order';
+import { OrderDTO } from '../dtos/order.dto';
 export interface OrderDataSource
 {
-    create(order: OrderRequestModel): Promise<OrderResponseModel>;
-    update(id:string, order: OrderRequestModel) : Promise<OrderResponseModel>;
-    getAll(): Promise<OrderResponseModel[]>;
-    findOne(idOrder: string): Promise<OrderResponseModel>;
+    create(order: OrderDTO): Promise<OrderDTO>;
+    update(id:string, order: OrderDTO) : Promise<OrderDTO>;
+    getAll(): Promise<OrderDTO[]>;
+    findOne(idOrder: string): Promise<OrderDTO>;
 }

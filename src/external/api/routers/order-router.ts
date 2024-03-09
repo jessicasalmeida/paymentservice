@@ -5,13 +5,14 @@ import { OrderUseCaseImpl } from "../../domain/use-cases/order-use-case";
 import CartRepositoryImpl from "../../domain/repositories/cart-repository";
 import { CartRepositoryMongoBd } from "../../data/data-sources/mongodb/cart-repository-mongo-bd";
 import { OrderController } from "../../operation/controllers/order-controller";
+import { CartGateway } from '../../../operation/gateways/cart';
+import { OrderGateway } from '../../../operation/gateways/order';
 
 const cartRepository = new CartRepositoryMongoBd();
 const orderRepository = new OrderRepositoryMongoBd();
 
-const orderR = new OrderRepositoryImpl(orderRepository);
-const orderUC = new OrderUseCaseImpl(orderR, new CartRepositoryImpl(cartRepository));
-const orderC = new OrderController(orderUC);
+const CartGateway = new CartGateway(cartRepository);
+const OrderGateway = new OrderGateway(orderRepository);
 
 export const orderRouter = Router();
 

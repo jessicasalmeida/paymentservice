@@ -1,74 +1,117 @@
-import { ProductUseCase } from '../interfaces/use-cases/product-use-case';
-import { ProductRepository } from '../interfaces/repositories/product-repository';
-import { ProductRequestModel, ProductResponseModel } from '../models/product';
-import { CartDTO =} from '../../common/dtos/cart.dto';
-import { OrderRepository } from '../interfaces/repositories/order-repository';
-import { CartRepository } from '../interfaces/repositories/cart-repository';
+import { generateRandomString } from '../../common/helpers/generators';
+import { ProductGateway } from '../../operation/gateways/product';
+import { ProductEntity } from '../entities/product';
+import { OrderGateway } from '../../operation/gateways/order';
+import { CartGateway } from '../../operation/gateways/cart';
 
-export class ProductUseCaseImpl implements ProductUseCase{
-    productRepository: ProductRepository;
-    order : OrderRepository;
-    cart: CartRepository;
+export class ProductUseCase {
 
-    constructor( productRepository: ProductRepository,  order : OrderRepository,cart: CartRepository){
-        this.productRepository = productRepository;
-        this.order = order;
-        this.cart = cart;
+    static async findProductByCategory(id: string, productGateway: ProductGateway): Promise<ProductEntity[] | null> {
+        const products = await productGateway.getAll();
+        if (products) {
+            return products.filter((p) => p.category === id);
+        }
+        return null;
     }
+    static async findProductById(id: string, productGateway: ProductGateway): Promise<ProductEntity | null> {
+        const product = productGateway.getOne(id);
+        if (product) {
+            return product;
+        }
+        return null;
+    }
+    static async createProduct(name: string, options: Array<string>, price: number, timeToPrepare: number, category: string,
+        status: boolean, productGateway: ProductGateway): Promise<ProductEntity | null> {
+        const novoId = generateRandomString();
+        const nProduct = new ProductEntity(
+            novoId,
+            name,
+            options,
+            price,
+            timeToPrepare,
+            category,
+            status
+        );
+        const product = productGateway.createProduct(nProduct);
+        if (product) {
+            return product;
+        }
+        return null;
 
-    async findProductByCategory(id: string): Promise<ProductResponseModel[]> {
-        const products = await this.productRepository.getAllProducts();
-        return products.filter((p) => p.category === id);
     }
-    async findProductById(id: string): Promise<ProductResponseModel> {
-        return this.productRepository.findProductById(id);
-    }
-    async createProduct(product: ProductRequestModel): Promise<ProductResponseModel> {
-        return this.productRepository.createProduct(product);
-    }
-    async deleteProduct(id: string): Promise<boolean> {
-        const product = await this.productRepository.findProductById(id);
-        if(!(await this.verifyActiveOrder(id))) {
-            await this.productRepository.deleteProduct(id);
+    static async deleteProduct(id: string, productGateway: ProductGateway, orderGateway: OrderGateway, cartGateway: CartGateway): Promise<boolean> {
+        const product = await ProductUseCase.findProductById(id, productGateway);
+        if (!(await ProductUseCase.verifyActiveOrder(id, productGateway, orderGateway, cartGateway))) {
+            await productGateway.delete(id);
             return true;
         }
         else {
             return false
         }
     }
-    async updateProduct(id: string, newProduct: ProductRequestModel): Promise<ProductResponseModel> {
-        return this.productRepository.updateProduct(id, newProduct);
-    }
-    async deactivateProduct(id: string): Promise<boolean> {
-        const product = await this.productRepository.findProductById(id);
-        if(!(await this.verifyActiveOrder(id))) {
-            product.status = false;
-            await this.productRepository.updateProduct(id, product)
-            return true;
+    static async updateProduct(id: string, name: string, options: Array<string>, price: number, timeToPrepare: number, category: string,
+        status: boolean, productGateway: ProductGateway): Promise<ProductEntity | null> {
+        const nProduct = new ProductEntity(
+            id,
+            name,
+            options,
+            price,
+            timeToPrepare,
+            category,
+            status
+        );
+        const product = productGateway.update(id, nProduct);
+        if (product) {
+            return product;
         }
-        else {
-            return false
-        }
-    }
-    async getActiveProducts(): Promise<ProductResponseModel[]> {
-        const products = await this.productRepository.getAllProducts();
-        return products.filter((p) => p.status === true);
-    }
+        return null;
 
-    async getAllProducts(): Promise<ProductResponseModel[]> {
-        return this.productRepository.getAllProducts();
     }
-
-    async verifyActiveOrder(id: string): Promise<boolean>
-    {
-        const orders = await this.order.getAllOrders();
-        let products = {} as ProductResponseModel[];
-        for (const order of orders) {
-            const cart = (await this.cart.getOne(order.idCart)) as CartDTO =;
-            products = cart.products as ProductResponseModel[];
-            products = products.filter((p) => p._id === id);
-            if(products.length>0){
+    static async deactivateProduct(id: string, productGateway: ProductGateway, orderGateway: OrderGateway, cartGateway: CartGateway): Promise<boolean> {
+        const product = await productGateway.getOne(id);
+        if (product) {
+            if (!(await ProductUseCase.verifyActiveOrder(id, productGateway, orderGateway, cartGateway))) {
+                product.status = false;
+                await productGateway.update(id, product)
                 return true;
+            }
+            else {
+                return false
+            }
+        }
+        else {
+            return false;
+        }
+    }
+    static async getActiveProducts(productGateway: ProductGateway): Promise<ProductEntity[] | null> {
+        const products = await productGateway.getAll();
+        if (products) {
+            return products.filter((p) => p.status === true);
+        }
+        return null;
+    }
+
+    static async getAllProducts(productGateway: ProductGateway): Promise<ProductEntity[] | null> {
+        const products = await productGateway.getAll();
+        if (products) {
+            return products;
+        }
+        return null;
+    }
+
+    static async verifyActiveOrder(id: string, productGateway: ProductGateway, orderGateway: OrderGateway, cartGateway: CartGateway): Promise<boolean> {
+        const orders = await orderGateway.getAll();
+        if (orders) {
+            let products = {} as ProductEntity[];
+            for (const order of orders) {
+                const cart = (await cartGateway.getOne(order.idCart));
+                if (cart) {
+                    products = cart.products as ProductEntity[];
+                    products = products.filter((p) => p.id === id);
+                    if (products.length > 0) {
+                        return true;
+                    }
+                }
             }
         }
         return false;

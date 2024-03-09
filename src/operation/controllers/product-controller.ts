@@ -1,66 +1,122 @@
-import express, { Request, Response } from 'express';
-import { ParamsDictionary } from "express-serve-static-core";
-import {Get, Route} from "tsoa";
-import { ProductUseCase } from '../../domain/interfaces/use-cases/product-use-case';
+import { ProductUseCase } from '../../core/usercases/product-use-case';
+import ProductDataSource from '../../common/interfaces/product-data-source';
+import { ProductGateway } from '../gateways/product';
+import { ProductPresenter } from '../presenters/product';
+import { ProductDTO, NewProductDTO } from '../../common/dtos/product.dto';
+import { ProductEntity } from '../../core/entities/product';
+import { OrderDataSource } from '../../common/interfaces/order-data-source';
+import { CartDataSource } from '../../common/interfaces/cart-data-source';
+import { OrderGateway } from '../gateways/order';
+import { CartGateway } from '../gateways/cart';
 
 export class ProductController {
 
     constructor(private readonly productUseCase: ProductUseCase) { }
 
-    async getProductById(req: Request, res: Response) {
-        /*  #swagger.parameters['$ref'] = ['#/components/parameters/someParameter1', '#/components/parameters/someParameter2'] */
-        const id = req.params.id;
-        const produto = await this.productUseCase.findProductById(id);
-        res.status(200).json(produto);
-    }
-
-    async getProductByCategory(req: Request, res: Response) {
-        const categoria = req.params.categoria;
-        const produto = await this.productUseCase.findProductByCategory(categoria);
-        res.status(200).json(produto);
-    }
-
-    async createProduct(req: Request, res: Response) {
-        const newProduct = req.body;
-        const product =  await this.productUseCase.createProduct(newProduct);
-        res.status(200).json(product);
-    }
-
-    async deleteProductById(req: Request, res: Response) {
-        const id = req.params.id;
-        const isDelete =  await this.productUseCase.deleteProduct(id);
-        if(isDelete) {
-            res.status(200).json("Produto deletado com sucesso");
+    static async getProductById(id: string, productDataSource: ProductDataSource) {
+        const productGateway = new ProductGateway(productDataSource);
+        if (!productGateway) {
+            throw new Error("Gateway Inválido");
         }
-        else{
-            res.status(500).json("O produto está em um pedido ativo e não pode ser deletado")
+        const product = await ProductUseCase.findProductById(id, productGateway);
+        if (!product) {
+            return null;
         }
+        return ProductPresenter.toDTO(product);
     }
 
-    async updateProductById(req: Request, res: Response) {
-        const id = req.params.id;
-        const newProduct = req.body;
-        const product =  await this.productUseCase.updateProduct(id, newProduct);
-        res.status(200).json(product);
+    static async getProductByCategory(category: string, productDataSource: ProductDataSource) {
+        const productGateway = new ProductGateway(productDataSource);
+        if (!productGateway) {
+            throw new Error("Gateway Inválido");
+        }
+        const product = await ProductUseCase.findProductByCategory(category, productGateway);
+        if (!product) {
+            return null;
+        }
+        const productDTO: ProductDTO[] = new Array();
+        product.forEach(element => {
+            productDTO.push(ProductPresenter.toDTO(element));
+        });
+        return productDTO;
     }
 
-    async deactivateProductById(req: Request, res: Response) {
-        const id = req.params.id;
-        const deactivate =  await this.productUseCase.deactivateProduct(id);
-        if(deactivate) {
-            res.status(200).json("Produto desativado com sucesso");
+    static async createProduct(newProductDTO: NewProductDTO, productDataSource: ProductDataSource) {
+        const productGateway = new ProductGateway(productDataSource);
+        if (!productGateway) {
+            throw new Error("Gateway Inválido")
         }
-        else{
-            res.status(500).json("O produto está em um pedido ativo e não pode ser desativado")
+        const product = ProductUseCase.createProduct(newProductDTO.name, newProductDTO.options,
+            newProductDTO.price, newProductDTO.timeToPrepare, newProductDTO.category,
+            newProductDTO.status, productGateway) as unknown as ProductEntity;
+        if (product) {
+            ProductPresenter.toDTO(product);
         }
+        return null;
     }
 
-    async getActiveProducts(req: Request, res: Response) {
-        const product =  await this.productUseCase.getActiveProducts();
-        res.status(200).json(product);
+    static async deleteProductById(id: string, productDataSource: ProductDataSource, orderDataSource: OrderDataSource, cartDataSource: CartDataSource) {
+        const productGateway = new ProductGateway(productDataSource);
+        const orderGateway = new OrderGateway(orderDataSource);
+        const cartGateway = new CartGateway(cartDataSource);
+        if (!productGateway) {
+            throw new Error("Gateway Inválido")
+        }
+        return ProductUseCase.deleteProduct(id, productGateway, orderGateway, cartGateway);
     }
-    async getAllProducts(req: Request, res: Response) {
-        const product =  await this.productUseCase.getAllProducts();
-        res.status(200).json(product);
+
+    static async updateProductById(id: string, newProductDTO: NewProductDTO, productDataSource: ProductDataSource) {
+        const productGateway = new ProductGateway(productDataSource);
+        if (!productGateway) {
+            throw new Error("Gateway Inválido");
+        }
+        const product = await ProductUseCase.updateProduct(id, newProductDTO.name, newProductDTO.options, newProductDTO.price, newProductDTO.timeToPrepare, newProductDTO.category, newProductDTO.status, productGateway);
+        if (!product) {
+            return null;
+        }
+        return ProductPresenter.toDTO(product);
+    }
+
+    static async deactivateProductById(id: string, productDataSource: ProductDataSource, orderDataSource: OrderDataSource, cartDataSource: CartDataSource) {
+        const productGateway = new ProductGateway(productDataSource);
+        const orderGateway = new OrderGateway(orderDataSource);
+        const cartGateway = new CartGateway(cartDataSource);
+        if (!productGateway) {
+            throw new Error("Gateway Inválido")
+        }
+        return ProductUseCase.deactivateProduct(id, productGateway, orderGateway, cartGateway);
+
+    }
+
+    static async getActiveProducts(productDataSource: ProductDataSource) {
+        const productGateway = new ProductGateway(productDataSource);
+        if (!productGateway) {
+            throw new Error("Gateway Inválido")
+        }
+        const product = ProductUseCase.getActiveProducts(productGateway) as unknown as ProductEntity[];
+        if (!product) {
+            return null;
+        }
+        const productDTO: ProductDTO[] = new Array();
+        product.forEach(element => {
+            productDTO.push(ProductPresenter.toDTO(element));
+        });
+        return productDTO;
+    }
+
+    static async getAllProducts(productDataSource: ProductDataSource) {
+        const productGateway = new ProductGateway(productDataSource);
+        if (!productGateway) {
+            throw new Error("Gateway Inválido")
+        }
+        const product = ProductUseCase.getAllProducts(productGateway) as unknown as ProductEntity[];
+        if (!product) {
+            return null;
+        }
+        const productDTO: ProductDTO[] = new Array();
+        product.forEach(element => {
+            productDTO.push(ProductPresenter.toDTO(element));
+        });
+        return productDTO;
     }
 }
