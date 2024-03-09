@@ -1,9 +1,9 @@
-import {connectToDataBase} from "./data/data-sources/mongodb/db-connect";
 import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
-import {routes} from "./presentation/routers";
 import swaggerOutput from "../public/swagger.json";
 import app from "./server";
+import { routes } from "./external/api/routers";
+import { connectToDataBase } from "./external/data-sources/mongodb/db-connect";
 
 const port = 8000;
 connectToDataBase()

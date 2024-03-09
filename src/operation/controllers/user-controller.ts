@@ -1,25 +1,31 @@
-import { Request, Response } from 'express';
-import { UserUseCase } from '../../domain/interfaces/use-cases/user-use-case';
+import { NewUserDTO, UserDTO } from '../../common/dtos/user.dto';
+import UserDataSource from '../../common/interfaces/user-data-source';
+import { UserGateway } from '../gateways/user';
+import { UserPresenter } from '../presenters/user';
+import { UserUseCase } from '../../core/usercases/user-use-case';
 
 export class userController {        
         constructor(private readonly userUseCase:UserUseCase) { }
 
-    async getUserById(req: Request, res: Response) {
-        try {
-            const id = req.params.id;
-            const user = await this.userUseCase.executeGetOne(id);
-            res.status(200).json(user);
-        } catch (error) {
-            res.status(500).send({message: "Error fetching data. " + error})
-        }        
+    static async getUserById(id: string, userDataSource: UserDataSource) : Promise<UserDTO|null> {
+       const userGateway = new UserGateway(userDataSource);
+       if (!userGateway) {
+        throw new Error("Gateway inválido");
+      }
+       const user = await UserUseCase.executeGetOne(id, userGateway);
+       
+      if(!user)
+      {
+        return null;
+      }
+      return UserPresenter.toDTO(user);
     }
-    async createUser(req: Request, res: Response) {
-        try {
-        const newUser= req.body;
-        const user = await this.userUseCase.executeCreate(newUser);
-        res.status(200).json(user);
-        } catch (error) {
-            res.status(500).send({message: "Error creating data. " + error})
-        }   
+    static createUser(newUserDTO: NewUserDTO, userDataSource: UserDataSource) : Promise<UserDTO|null> {
+        const userGateway = new UserGateway(userDataSource);
+       if (!userGateway) {
+        throw new Error("Gateway inválido");
+      }
+       const user = UserUseCase.executeCreate(newUserDTO.name, newUserDTO.cpf, newUserDTO.email, userGateway);
+       return UserPresenter.toDTO(user);       
     }
 }
