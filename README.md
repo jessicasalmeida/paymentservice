@@ -16,16 +16,16 @@
 - Passo 4: Suba o ambiente do docker compose para o banco de dados
 - Passo 5: NPM RUN DEV
 
-##Testando a aplicação
--Collection Postman fiap_restaurante, esta divida em user, products, cart e order.
--Na collection fiap_restaurante do postman existe uma variavel configurada para a porta 5000 para ambiente docker e 8000 para local (não esqueça de salvar ao editar ;D)
+## Testando a aplicação
+- Collection Postman fiap_restaurante, esta divida em user, products, cart e order.
+> Na collection fiap_restaurante do postman existe uma variavel configurada para a porta 5000 para ambiente docker e 8000 para local (não esqueça de salvar ao editar ;D)
 
 ### Aplicação
 
 **Gestão de Products**
 
 - getAllProducts: /product
-(TIP: para agilidades nos testes do professor este método carrega os produtos no banco de dados)
+> TIP: para agilidades nos testes do professor este método carrega os produtos no banco de dados
 
 - createProduct: /product/
 > Exemplo:
@@ -37,10 +37,10 @@
         "timeToPrepare": 2,
         "status": true
     }
-(TIP: salve o ID caso queira usar posteriormente)
+> TIP: salve o ID caso queira usar posteriormente
 
 - getProductById: /product/:id
--Exemplo: product/65aeffe53cb25a62bcec76f7
+> Exemplo: product/65aeffe53cb25a62bcec76f7
 
 - updateProductById: /product/:id
 > Exemplo: product/65aeffe53cb25a62bcec76f7
@@ -52,23 +52,24 @@
         "timeToPrepare": 2,
         "status": true
     }
-*deleteProductById: /product/:id
---Exemplo: product/65aeffe53cb25a62bcec76f7
----Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa. 
----Para testar que está em uma order ativa adicione o produto no carrinho e o avance com a API receiveOrder,
+- deleteProductById: /product/:id
+ - Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa.
+ - Para testar que está em uma order ativa adicione o produto no carrinho e o avance com a API receiveOrder,
 neste momento o pedido esta ativo e o produto não poderá ser excluido
+> Exemplo: product/65aeffe53cb25a62bcec76f7
 
-*deactivateProductById: /product/deactive/:id
---Exemplo: product/65aeffe53cb25a62bcec76f7
-Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa
+- deactivateProductById: /product/deactive/:id
+  - Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa
+> Exemplo: product/65aeffe53cb25a62bcec76f7
 
-*getProductByCategory: /product/categoria/:categoria
---Exemplo: product/categoria/combo
---Exemplo: product/categoria/lanche
---Exemplo: product/categoria/bebida
---Exemplo: product/categoria/sobremesa
---Exemplo: product/categoria/acompanhamento
-(TIP: EndPoint criado para facilitar a consulta da categoria de products para montagem do cart)
+
+-getProductByCategory: /product/categoria/:categoria
+ -Exemplo: product/categoria/combo
+ -Exemplo: product/categoria/lanche
+ -Exemplo: product/categoria/bebida
+ -Exemplo: product/categoria/sobremesa
+ -Exemplo: product/categoria/acompanhamento
+> TIP: EndPoint criado para facilitar a consulta da categoria de products para montagem do cart
 
 ---Gestão de Users---
 USER
