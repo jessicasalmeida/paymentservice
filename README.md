@@ -20,8 +20,6 @@
 - Collection Postman fiap_restaurante, esta divida em user, products, cart e order.
 > Na collection fiap_restaurante do postman existe uma variavel configurada para a porta 5000 para ambiente docker e 8000 para local (não esqueça de salvar ao editar ;D)
 
-### Aplicação
-
 **Gestão de Products**
 
 - getAllProducts: /product
@@ -71,48 +69,45 @@ neste momento o pedido esta ativo e o produto não poderá ser excluido
  -Exemplo: product/categoria/acompanhamento
 > TIP: EndPoint criado para facilitar a consulta da categoria de products para montagem do cart
 
----Gestão de Users---
-USER
-*createUser: /users
---Exemplo:
+**Gestão de Users**
+
+- createUser: /users
+> TIP: Copie o ID do createUser para usar nos próximos passos
+>Exemplo:
     {
         "cpf": "000.000.000-00",
         "name": "Professor",
         "email": "professor@fiap.com"
     }
-(TIP: Copie o ID do createUser para usar nos próximos passos)
 
-*getUserById: /users/:id
---Exemplo:
+
+- getUserById: /users/:id
+> Exemplo:
     users/65ad86e5c8f936abc7bb2fb3
 
 
----Gestão de Cart---
-*createCart: /cart/
-(TIP: Copie o ID do cart para usar nos próximos passos)
+**Gestão de Cart**
+- createCart: /cart/
+> TIP: Copie o ID do cart para usar nos próximos passos
 
-*addUser: /cart/user/:id
-query.param: user
---Exemplo: /cart/user/65b19e8f5fe107d74bd05ce0?user=65ad86e5c8f936abc7bb2fb3
+- addUser: /cart/user/:id
+> Exemplo: /cart/user/65b19e8f5fe107d74bd05ce0?user=65ad86e5c8f936abc7bb2fb3
 
-*addProduct: /cart/product/:id
-query.param: produto
---Exemplo: /cart/product/65b19e8f5fe107d74bd05ce0?product=65b1a124e453756a9567b9c7
-(TIP: Ao adicionar use getProductByCategory para verificar quais os produtos da categoria pretendida)
-(Policies: Ao adicionar 1 compo e posteriomente adicionar 1 bebida e 1 acompanhamento, este itens terão seu valor zerado no cart, pois são inclusos no combo)
+-addProduct: /cart/product/:id
+ -Policies: Ao adicionar 1 compo e posteriomente adicionar 1 bebida e 1 acompanhamento, este itens terão seu valor zerado no cart, pois são inclusos no combo
+> Exemplo: /cart/product/65b19e8f5fe107d74bd05ce0?product=65b1a124e453756a9567b9c7
+> TIP: Ao adicionar use getProductByCategory para verificar quais os produtos da categoria pretendida
 
-*personalizeItens: /cart/itens/:id
-query.param: produto
-query.param: options
---Exemplo: /cart/itens/65b19e8f5fe107d74bd05ce0?product=65b1a124e453756a9567b9c7&options=["Pão com Gergelim","Hamburguer","Queijo Cheddar","Ketchup","Mostarda","Cebola","Picles"]
+- personalizeItens: /cart/itens/:id
+> Exemplo: /cart/itens/65b19e8f5fe107d74bd05ce0?product=65b1a124e453756a9567b9c7&options=["Pão com Gergelim","Hamburguer","Queijo Cheddar","Ketchup","Mostarda","Cebola","Picles"]
 
-*resumeCart: /cart/:id
---Exemplo: /cart/65b19e8f5fe107d74bd05ce0
+- resumeCart: /cart/:id
+    > Exemplo: /cart/65b19e8f5fe107d74bd05ce0
 
-*closeCart: /cart/close/:id
---Exemplo: /cart/close/65b19e8f5fe107d74bd05ce0
+- closeCart: /cart/close/:id
+    > Exemplo: /cart/close/65b19e8f5fe107d74bd05ce0
 
-*payCart: /cart/pay/:id
+- payCart: /cart/pay/:id
 --Exemplo: /cart/pay/65b19e8f5fe107d74bd05ce0
 
 *sendToKitchen: /cart/kitchen/:id
