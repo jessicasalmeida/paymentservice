@@ -23,7 +23,7 @@
 **Gestão de Products**
 
 - getAllProducts: /product
-   -***TIP: para agilidades nos testes do professor este método carrega os produtos no banco de dados***
+   - ***TIP: para agilidades nos testes do professor este método carrega os produtos no banco de dados***
 
 - createProduct: /product/
     > Exemplo:
