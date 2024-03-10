@@ -21,7 +21,7 @@ export class CartController {
         if (!cart) {
             return null;
         }
-        return CartPresenter.toDTO(cart);
+        return await CartPresenter.toDTO(cart);
     }
 
     static async addUser(idCart: string, idUser: string, cartDataSource: CartDataSource, userDataSource: UserDataSource) {

@@ -8,7 +8,7 @@ export class OrderGateway {
         this.orderDataSource = orderDataSource;
     }
 
-    async createorder(order: OrderEntity): Promise<OrderEntity | null> {
+    async create(order: OrderEntity): Promise<OrderEntity | null> {
 
         const orderDTO: OrderDTO =
         {
@@ -23,7 +23,7 @@ export class OrderGateway {
         return sucesso;
     }
 
-    async getOne(id: string): Promise<OrderEntity | null> {
+    async findOne(id: string): Promise<OrderEntity | null> {
         const data = await this.orderDataSource.findOne(id);
         if (data) {
             const dataEntity = new OrderEntity(

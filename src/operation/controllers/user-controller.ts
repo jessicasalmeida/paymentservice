@@ -27,7 +27,7 @@ export class userController {
        if (!userGateway) {
         throw new Error("Gateway inválido");
       }
-       const user = UserUseCase.executeCreate(newUserDTO.name, newUserDTO.cpf, newUserDTO.email, userGateway) as unknown as UserEntity;
+       const user = await UserUseCase.executeCreate(newUserDTO.name, newUserDTO.cpf, newUserDTO.email, userGateway) as unknown as UserEntity;
        if(!user)
        {
          return null;

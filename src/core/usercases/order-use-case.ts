@@ -26,7 +26,7 @@ export class OrderUseCase {
             estimatedDelivery,
             status
         );
-        const nOrder = orderGateway.createorder(order);
+        const nOrder = orderGateway.create(order);
         if(nOrder)
         {
             return nOrder;
@@ -37,7 +37,7 @@ export class OrderUseCase {
     }
 
     static async prepareOrder(idOrder: string, orderGateway: OrderGateway): Promise<OrderEntity | null> {
-        const order = await orderGateway.getOne(idOrder);
+        const order = await orderGateway.findOne(idOrder);
         if (order) {
             order.status = "PREPARING";
             return orderGateway.update(idOrder, order);
@@ -48,7 +48,7 @@ export class OrderUseCase {
     }
 
     static async estimateDelivery(idOrder: string, orderGateway: OrderGateway): Promise<string> {
-        const order = await orderGateway.getOne(idOrder);
+        const order = await orderGateway.findOne(idOrder);
         if (order) {
             let estimatedDelivery = new Date((order.receiveDate.getTime() + order.deliveryTime * 60000));
             return `The estimate time to order is ready is ${estimatedDelivery}`;
@@ -59,7 +59,7 @@ export class OrderUseCase {
     }
 
     static async sendNotificationDelivery(idOrder: string, orderGateway: OrderGateway): Promise<string> {
-        const order = await orderGateway.getOne(idOrder);
+        const order = await orderGateway.findOne(idOrder);
         if (order) {
             return `The order is ready to delivery`;
         }
@@ -69,7 +69,7 @@ export class OrderUseCase {
     }
 
     static async updateStatusToReady(idOrder: string, orderGateway: OrderGateway): Promise<string> {
-        const order = await orderGateway.getOne(idOrder);
+        const order = await orderGateway.findOne(idOrder);
         if (order) {
             order.status = "READY";
             await orderGateway.update(idOrder, order);
@@ -81,7 +81,7 @@ export class OrderUseCase {
     }
 
     static async updateStatusToDelivered(idOrder: string, orderGateway: OrderGateway): Promise<OrderEntity | null> {
-        const order = await orderGateway.getOne(idOrder);
+        const order = await orderGateway.findOne(idOrder);
         if (order) {
             order.status = "DELIVERED";
             return orderGateway.update(idOrder, order);
@@ -92,7 +92,7 @@ export class OrderUseCase {
     }
 
     static async updateStatusToClosed(idOrder: string, orderGateway: OrderGateway): Promise<OrderEntity | null> {
-        const order = await orderGateway.getOne(idOrder);
+        const order = await orderGateway.findOne(idOrder);
         if (order) {
             order.status = "CLOSED";
             return orderGateway.update(idOrder, order);

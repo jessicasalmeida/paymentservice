@@ -10,7 +10,7 @@ services:
       - mongo
     networks:
       - mongo-compose-network
-
+      
   mongo:
     image: mongo
     environment:

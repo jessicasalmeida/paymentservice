@@ -6,19 +6,20 @@ import { CartDTO } from '../../../common/dtos/cart.dto';
 export class CartRepositoryMongoBd implements CartDataSource {
 
     async create(newCart:CartDTO): Promise<CartDTO> {
-        return  await collections.carts?.insertOne(newCart) as unknown as CartDTO;
+        await collections.carts?.insertOne(newCart);
+        return newCart;
     }   
 
     async update(id: string, newCart: CartDTO): Promise<CartDTO>
     {
-        const query = { _id: new ObjectId(id)};
+        const query = { id: (id)};
         await collections.carts?.updateOne(query, {$set: newCart});
         return newCart;
     }
 
     async getOne(id: string) : Promise<CartDTO>
     {
-        const query = { _id: new ObjectId(id)};
+        const query = { id: (id)};
         const cart = await collections.carts?.findOne(query);
         if(!cart)
         {

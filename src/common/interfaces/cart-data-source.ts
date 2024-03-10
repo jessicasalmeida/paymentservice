@@ -1,5 +1,4 @@
 import { CartDTO, NewCartDTO } from '../dtos/cart.dto';
-import { NewCartDTO as CartResponseModel } from '../dtos/cart.dto';
 
 export interface CartDataSource{
     create(newCart: NewCartDTO): Promise<CartDTO>;

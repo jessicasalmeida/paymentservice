@@ -46,11 +46,11 @@ export class ProductController {
         if (!productGateway) {
             throw new Error("Gateway Inválido")
         }
-        const product = ProductUseCase.createProduct(newProductDTO.name, newProductDTO.options,
+        const product = await ProductUseCase.createProduct(newProductDTO.name, newProductDTO.options,
             newProductDTO.price, newProductDTO.timeToPrepare, newProductDTO.category,
             newProductDTO.status, productGateway) as unknown as ProductEntity;
         if (product) {
-            ProductPresenter.toDTO(product);
+            return ProductPresenter.toDTO(product);
         }
         return null;
     }
@@ -109,7 +109,7 @@ export class ProductController {
         if (!productGateway) {
             throw new Error("Gateway Inválido")
         }
-        const product = ProductUseCase.getAllProducts(productGateway) as unknown as ProductEntity[];
+        const product = await ProductUseCase.getAllProducts(productGateway) as unknown as ProductEntity[];
         if (!product) {
             return null;
         }

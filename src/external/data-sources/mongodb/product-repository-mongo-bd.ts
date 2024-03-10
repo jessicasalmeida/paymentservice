@@ -26,7 +26,7 @@ export class ProductRepositoryMongoBd implements ProductDataSource {
     ];
 
     async delete(id: string): Promise<boolean> {
-        const query = { _id: new ObjectId(id)};
+        const query = { id: (id)};
         try {
             await collections.product?.deleteOne(query);
             return true;
@@ -36,20 +36,20 @@ export class ProductRepositoryMongoBd implements ProductDataSource {
          return false;
     }
     async update(id: string, product: ProductDTO): Promise<ProductDTO> {
-        const query = { _id: new ObjectId(id)};
+        const query = { id: (id)};
         await collections.product?.updateOne(query, {$set:product});
         return product;
     }
     
     async getOne(id: string): Promise<ProductDTO> {
-        const query = { _id: new ObjectId(id)};
+        const query = { id: (id)};
         const produto = await collections.product?.findOne(query) as ProductDTO;
         if (!produto) {
             throw new Error(`Produto with id ${id} not found`);
         }
         return produto;
     }
-
+    
     async getAll(): Promise<ProductDTO[]> {
         if(this.produtos.length >0) {
             await collections.product?.insertMany(this.produtos);

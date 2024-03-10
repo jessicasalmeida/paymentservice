@@ -25,11 +25,7 @@ userRouter.post('/', async (req, res) => {
     if (!req.body) {
         res.status(500).send();
     }
-    const newUser: NewUserDTO = {
-        name: req.body.name,
-        cpf: req.body.cpf,
-        email: req.body.email,
-    };
+    const newUser = req.body;
     const user = await userController.createUser(newUser, userRepository);
     if (user) {
         res.status(200).json(user);

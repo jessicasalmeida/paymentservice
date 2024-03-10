@@ -11,7 +11,7 @@ export class OrderRepositoryMongoBd implements OrderDataSource {
     }
 
     async update(id: string, order: OrderDTO): Promise<OrderDTO> {
-        const query = { _id: new ObjectId(id)};
+        const query = { id: (id)};
         await collections.orders?.updateOne(query, {$set: order});
         return order;
     }
@@ -22,9 +22,10 @@ export class OrderRepositoryMongoBd implements OrderDataSource {
 
     async findOne(id: string) : Promise<OrderDTO>
     {
-        const query = { _id: new ObjectId(id)};
+        const query = { id: (id)};
         const order = await collections.orders?.findOne(query);
         if (!order) {
+            
             throw new Error(`Order with id ${id} not found`);
         }
         return order as OrderDTO;

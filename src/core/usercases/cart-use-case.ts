@@ -4,18 +4,19 @@ import { ProductEntity } from '../entities/product';
 import { CartGateway } from '../../operation/gateways/cart';
 import { UserGateway } from '../../operation/gateways/user';
 import { ProductGateway } from '../../operation/gateways/product';
+import { generateRandomString } from '../../common/helpers/generators';
 
 export class CartUseCase {
 
     static async createCart(cartGateway: CartGateway): Promise<CartEntity | null> {
         const newCart: CartEntity = new CartEntity(
-            "",
+            generateRandomString(),
             {} as UserEntity,
             [] as ProductEntity[],
             0,
             "OPEN",
             false);
-        const cart = cartGateway.createcart(newCart);
+        const cart = await cartGateway.createcart(newCart);
         if (cart) {
             return cart;
         }
