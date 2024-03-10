@@ -44,21 +44,44 @@ const cartRepository = new cart_repository_mongo_bd_1.CartRepositoryMongoBd();
 exports.productRouter = (0, express_1.Router)();
 exports.productRouter.use(express_1.default.json());
 exports.productRouter.get('/categoria/:categoria', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Product']
+        #swagger.summary = 'GetCategoria'
+        #swagger.description = 'Endpoint to get the list of specific product on category. Ex: Lanche, Combo, Sobremesa, Bebida*/
     const categoria = req.params.categoria;
     const produto = yield product_controller_1.ProductController.getProductByCategory(categoria, productRepository);
     res.status(200).json(produto);
 }));
 exports.productRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Product']
+        #swagger.summary = 'GetID'
+            #swagger.description = 'Endpoint to get the specific product.' */
     const id = req.params.id;
     const product = yield product_controller_1.ProductController.getProductById(id, productRepository);
     res.status(200).json(product);
 }));
 exports.productRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Product']
+            #swagger.description = 'Endpoint to add a product'
+            #swagger.summary = 'Create'*/
+    /*#swagger.requestBody = {
+    required: true,
+    content: {
+        "application/json": {
+            schema: {
+                $ref: "#/components/schemas/product"
+            }
+        }
+    }
+}
+*/
     const newProduct = req.body;
     const product = yield product_controller_1.ProductController.createProduct(newProduct, productRepository);
     res.status(200).json(product);
 }));
 exports.productRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Product']
+        #swagger.summary = 'Delete'
+        #swagger.description = 'Endpoint to delete a product' */
     const id = req.params.id;
     const product = yield product_controller_1.ProductController.deleteProductById(id, productRepository, orderRepository, cartRepository);
     if (product) {
@@ -69,12 +92,29 @@ exports.productRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, voi
     }
 }));
 exports.productRouter.post('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Product']
+        #swagger.summary = 'Update'
+        #swagger.description = 'Endpoint to update a product' */
+    /*#swagger.requestBody = {
+   required: true,
+   content: {
+       "application/json": {
+           schema: {
+               $ref: "#/components/schemas/product"
+           }
+       }
+   }
+}
+*/
     const id = req.params.id;
     const newProduct = req.body;
     const product = yield product_controller_1.ProductController.updateProductById(id, newProduct, productRepository);
     res.status(200).json(product);
 }));
 exports.productRouter.post('/deactive/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Product']
+        #swagger.summary = 'Deactive'
+        #swagger.description = 'Endpoint to deactive a product' */
     const id = req.params.id;
     const product = yield product_controller_1.ProductController.deactivateProductById(id, productRepository, orderRepository, cartRepository);
     if (product) {
@@ -85,6 +125,9 @@ exports.productRouter.post('/deactive/:id', (req, res) => __awaiter(void 0, void
     }
 }));
 exports.productRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Product']
+       #swagger.summary = 'GetAll'
+       #swagger.description = 'Endpoint to get  all products' */
     const product = yield product_controller_1.ProductController.getAllProducts(productRepository);
     res.status(200).json(product);
 }));

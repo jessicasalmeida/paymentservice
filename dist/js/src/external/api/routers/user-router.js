@@ -41,6 +41,8 @@ const userRepository = new user_repository_mongo_bd_1.userRepositoryMongoBd();
 exports.userRouter = (0, express_1.Router)();
 exports.userRouter.use(express_1.default.json());
 exports.userRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['User']
+           #swagger.description = 'Endpoint to get the specific user.' */
     const user = yield user_controller_1.userController.getUserById(req.params.id, userRepository);
     if (user) {
         res.status(200).json(user);
@@ -50,6 +52,19 @@ exports.userRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 }));
 exports.userRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['User']
+           #swagger.description = 'Endpoint to add a user.' */
+    /*  #swagger.requestBody = {
+        required: true,
+        content: {
+            "application/json": {
+                schema: {
+                    $ref: "#/components/schemas/user"
+                }
+            }
+        }
+    }
+*/
     if (!req.body) {
         res.status(500).send();
     }

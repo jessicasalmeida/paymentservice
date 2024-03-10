@@ -12,6 +12,8 @@ export const userRouter = Router();
 userRouter.use(express.json());
 
 userRouter.get('/:id', async (req, res) => {
+     /*  #swagger.tags = ['User']
+            #swagger.description = 'Endpoint to get the specific user.' */
     const user = await userController.getUserById(req.params.id, userRepository);
     if (user) {
         res.status(200).json(user);
@@ -22,6 +24,20 @@ userRouter.get('/:id', async (req, res) => {
 });
 
 userRouter.post('/', async (req, res) => {
+     /*  #swagger.tags = ['User']
+            #swagger.description = 'Endpoint to add a user.' */
+
+        /*  #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/user"
+                    }  
+                }
+            }
+        } 
+    */
     if (!req.body) {
         res.status(500).send();
     }

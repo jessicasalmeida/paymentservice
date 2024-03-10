@@ -44,22 +44,34 @@ const userRepository = new user_repository_mongo_bd_1.userRepositoryMongoBd();
 exports.cartRouter = (0, express_1.Router)();
 exports.cartRouter.use(express_1.default.json());
 exports.cartRouter.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Cart']
+        #swagger.summary = 'Create'
+        #swagger.description = 'Endpoint to create a cart' */
     const cart = yield cart_controller_1.CartController.createCart(cartRepository);
     res.status(200).json(cart);
 }));
 exports.cartRouter.post('/user/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Cart']
+        #swagger.summary = 'Add a User'
+        #swagger.description = 'Endpoint to add a user to cart' */
     const idCart = req.params.id;
     const idUser = req.query.user;
     const cart = yield cart_controller_1.CartController.addUser(idCart, idUser, cartRepository, userRepository);
     res.status(200).json(cart);
 }));
 exports.cartRouter.post('/product/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Cart']
+        #swagger.summary = 'Add a Product'
+        #swagger.description = 'Endpoint to add a product to cart' */
     const idCart = req.params.id;
     const idProduct = req.query.product;
     const cart = yield cart_controller_1.CartController.addProduct(idCart, idProduct, cartRepository, productRepository);
     res.status(200).json(cart);
 }));
 exports.cartRouter.post('/itens/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Cart']
+        #swagger.summary = 'Personalize itens'
+        #swagger.description = 'Endpoint to personalize product itens' */
     const id = req.params.id;
     const product = req.query.product;
     const options = req.query.options;
@@ -67,21 +79,33 @@ exports.cartRouter.post('/itens/:id', (req, res) => __awaiter(void 0, void 0, vo
     res.status(200).json(cart);
 }));
 exports.cartRouter.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Cart']
+        #swagger.summary = 'Resume'
+        #swagger.description = 'Endpoint to resume a cart' */
     const id = req.params.id;
     const cart = yield cart_controller_1.CartController.resumeCart(id, cartRepository);
     res.status(200).json(cart);
 }));
 exports.cartRouter.post('/close/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Cart']
+        #swagger.summary = 'Close'
+        #swagger.description = 'Endpoint to close a cart' */
     const id = req.params.id;
     const cart = yield cart_controller_1.CartController.closeCart(id, cartRepository);
     res.status(200).json(cart);
 }));
 exports.cartRouter.post('/pay/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Cart']
+        #swagger.summary = 'Pay'
+        #swagger.description = 'Endpoint to pay a cart' */
     const id = req.params.id;
     const cart = yield cart_controller_1.CartController.payCart(id, cartRepository);
     res.status(200).json(cart);
 }));
 exports.cartRouter.post('/kitchen/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Cart']
+        #swagger.summary = 'Send to Kitchen'
+        #swagger.description = 'Endpoint to send to kitchen a cart' */
     const id = req.params.id;
     const cartSended = yield cart_controller_1.CartController.sendToKitchen(id, cartRepository);
     if (cartSended) {
@@ -92,6 +116,9 @@ exports.cartRouter.post('/kitchen/:id', (req, res) => __awaiter(void 0, void 0, 
     }
 }));
 exports.cartRouter.post('/cancel/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Cart']
+        #swagger.summary = 'Cancel'
+        #swagger.description = 'Endpoint to cancel a cart' */
     const id = req.params.id;
     const cart = yield cart_controller_1.CartController.cancelCart(id, cartRepository);
     res.status(200).json(cart);
