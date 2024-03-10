@@ -20,6 +20,8 @@
 - Collection Postman fiap_restaurante, esta divida em user, products, cart e order.
 > Na collection fiap_restaurante do postman existe uma variavel configurada para a porta 5000 para ambiente docker e 8000 para local (não esqueça de salvar ao editar ;D)
 
+
+
 **Gestão de Products**
 
 - getAllProducts: /product
@@ -51,8 +53,8 @@
         "status": true
     }
 - deleteProductById: /product/:id
- - Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa.
- - Para testar que está em uma order ativa adicione o produto no carrinho e o avance com a API receiveOrder,
+   - Politica: Um produto só pode ser excluido/desativado se não estiver em nenhuma order ativa.
+   - Para testar que está em uma order ativa adicione o produto no carrinho e o avance com a API receiveOrder,
 neste momento o pedido esta ativo e o produto não poderá ser excluido
    > Exemplo: product/65aeffe53cb25a62bcec76f7
 
@@ -64,6 +66,7 @@ neste momento o pedido esta ativo e o produto não poderá ser excluido
 -getProductByCategory: /product/categoria/:categoria
  > Exemplo: product/categoria/combo || product/categoria/lanche || product/categoria/bebida || product/categoria/sobremesa || product/categoria/acompanhamento
  - ***TIP: EndPoint criado para facilitar a consulta da categoria de products para montagem do cart***
+
 
 **Gestão de Users**
 
@@ -82,6 +85,7 @@ neste momento o pedido esta ativo e o produto não poderá ser excluido
     users/65ad86e5c8f936abc7bb2fb3
 
 
+
 **Gestão de Cart**
 - createCart: /cart/
    - ***TIP: Copie o ID do cart para usar nos próximos passos***
@@ -89,8 +93,8 @@ neste momento o pedido esta ativo e o produto não poderá ser excluido
 - addUser: /cart/user/:id
    > Exemplo: /cart/user/65b19e8f5fe107d74bd05ce0?user=65ad86e5c8f936abc7bb2fb3
 
--addProduct: /cart/product/:id
- -Policies: Ao adicionar 1 compo e posteriomente adicionar 1 bebida e 1 acompanhamento, este itens terão seu valor zerado no cart, pois são inclusos no combo
+- addProduct: /cart/product/:id
+ - Policies: Ao adicionar 1 compo e posteriomente adicionar 1 bebida e 1 acompanhamento, este itens terão seu valor zerado no cart, pois são inclusos no combo
    > Exemplo: /cart/product/65b19e8f5fe107d74bd05ce0?product=65b1a124e453756a9567b9c7
    - ***TIP: Ao adicionar use getProductByCategory para verificar quais os produtos da categoria pretendida***
 
@@ -106,13 +110,16 @@ neste momento o pedido esta ativo e o produto não poderá ser excluido
 - payCart: /cart/pay/:id
    > Exemplo: /cart/pay/65b19e8f5fe107d74bd05ce0
 
--sendToKitchen: /cart/kitchen/:id
+- sendToKitchen: /cart/kitchen/:id
    > Exemplo: /cart/kitchen/65b19e8f5fe107d74bd05ce0
 
--cancelCart: /cart/cancel/:id
+- cancelCart: /cart/cancel/:id
    > Exemplo: /cart/cancel/65b19e8f5fe107d74bd05ce0
 
+
+
 **Gestão de ORDER**
+
 - receiveOrder: /order/receive/:id
    >Exemplo: /order/receive/65b19e8f5fe107d74bd05ce0
    - ***TIP: Agora você esta manipulando a order. Copie e cole o id da order para sequencia das proximas***
