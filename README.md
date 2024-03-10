@@ -23,10 +23,10 @@
 **Gestão de Products**
 
 - getAllProducts: /product
-> TIP: para agilidades nos testes do professor este método carrega os produtos no banco de dados
+    > TIP: para agilidades nos testes do professor este método carrega os produtos no banco de dados
 
 - createProduct: /product/
-> Exemplo:
+    > Exemplo:
     {
         "name": "Sorvete Misto",
         "options": [],
@@ -35,7 +35,7 @@
         "timeToPrepare": 2,
         "status": true
     }
-> TIP: salve o ID caso queira usar posteriormente
+    > TIP: salve o ID caso queira usar posteriormente
 
 - getProductById: /product/:id
 > Exemplo: product/65aeffe53cb25a62bcec76f7
