@@ -41,7 +41,7 @@ export class CartUseCase {
         }
     }
 
-    async addProduct(idCart: string, idProduct: string, cartGateway: CartGateway, productGateway: ProductGateway): Promise<CartEntity | null> {
+    static async addProduct(idCart: string, idProduct: string, cartGateway: CartGateway, productGateway: ProductGateway): Promise<CartEntity | null> {
         const cart = await cartGateway.getOne(idCart);
         if (cart) {
             let product = await productGateway.getOne(idProduct);

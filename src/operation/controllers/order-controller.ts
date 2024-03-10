@@ -1,49 +1,103 @@
-import {Request, Response} from "express";
-import { OrderUseCase } from '../../domain/interfaces/use-cases/order-use-case';
+import { OrderUseCase } from "../../core/usercases/order-use-case";
+import { CartDataSource } from '../../common/interfaces/cart-data-source';
+import { CartGateway } from '../gateways/cart';
+import { OrderGateway } from '../gateways/order';
+import { OrderDataSource } from '../../common/interfaces/order-data-source';
+import { OrderPresenter } from "../presenters/order";
 
 export class OrderController {
     constructor(private readonly orderUseCase: OrderUseCase) {
     }
 
-    async receiveOrder(req: Request, res: Response) {
-        const id = req.params.id;
-        const order = await this.orderUseCase.receiveOrder(id);
-        res.status(200).json(order);
+    static async receiveOrder(id: string, orderDataSource: OrderDataSource, cartDataSource: CartDataSource) {
+        const orderGateway = new OrderGateway(orderDataSource);
+        const cartGateway = new CartGateway(cartDataSource);
+        if (!orderGateway || !cartGateway) {
+            throw new Error("Gateway Inválido");
+        }
+        const order = await OrderUseCase.receiveOrder(id, orderGateway, cartGateway);
+        if(order)
+        {
+            return OrderPresenter.toDTO(order);
+        }
+        return null;
     }
 
-    async prepareOrder(req: Request, res: Response) {
-        const id = req.params.id;
-        const order = await this.orderUseCase.prepareOrder(id);
-        res.status(200).json(order);
+    static async prepareOrder(id: string, orderDataSource: OrderDataSource) {
+        const orderGateway = new OrderGateway(orderDataSource);
+        if (!orderGateway) {
+            throw new Error("Gateway Inválido");
+        }
+        const order = await OrderUseCase.prepareOrder(id, orderGateway);
+        if(order)
+        {
+            return OrderPresenter.toDTO(order);
+        }
+        return null;
     }
 
-    async estimateDelivery(req: Request, res: Response) {
-        const id = req.params.id;
-        const order = await this.orderUseCase.estimateDelivery(id);
-        res.status(200).json(order);
+    static async estimateDelivery(id: string, orderDataSource: OrderDataSource) {
+        const orderGateway = new OrderGateway(orderDataSource);
+        if (!orderGateway) {
+            throw new Error("Gateway Inválido");
+        }
+        const order = await OrderUseCase.estimateDelivery(id, orderGateway);
+        if(order)
+        {
+            return order;
+        }
+        return null;
     }
 
-    async updateStatusToReady(req: Request, res: Response) {
-        const id = req.params.id;
-        const order = await this.orderUseCase.updateStatusToReady(id);
-        res.status(200).json(order);
+    static async updateStatusToReady(id: string, orderDataSource: OrderDataSource) {
+        const orderGateway = new OrderGateway(orderDataSource);
+        if (!orderGateway) {
+            throw new Error("Gateway Inválido");
+        }
+        const order = await OrderUseCase.updateStatusToReady(id, orderGateway);
+        if(order)
+        {
+            return order;
+        }
+        return null;
     }
 
-    async updateStatusToDelivered(req: Request, res: Response) {
-        const id = req.params.id;
-        const order = await this.orderUseCase.updateStatusToDelivered(id);
-        res.status(200).json(order);
+    static async updateStatusToDelivered(id: string, orderDataSource: OrderDataSource) {
+        const orderGateway = new OrderGateway(orderDataSource);
+        if (!orderGateway) {
+            throw new Error("Gateway Inválido");
+        }
+        const order = await OrderUseCase.updateStatusToDelivered(id, orderGateway);
+        if(order)
+        {
+            return order;
+        }
+        return null;
     }
 
-    async updateStatusToClosed(req: Request, res: Response) {
-        const id = req.params.id;
-        const order = await this.orderUseCase.updateStatusToClosed(id);
-        res.status(200).json(order);
+    static async updateStatusToClosed(id: string, orderDataSource: OrderDataSource) {
+        const orderGateway = new OrderGateway(orderDataSource);
+        if (!orderGateway) {
+            throw new Error("Gateway Inválido");
+        }
+        const order = await OrderUseCase.updateStatusToClosed(id, orderGateway);
+        if(order)
+        {
+            return order;
+        }
+        return null;
     }
 
-    async getAllActiveOrders(req: Request, res: Response) {
-        const id = req.params.id;
-        const order = await this.orderUseCase.getAllActiveOrders();
-        res.status(200).json(order);
+    static async getAllActiveOrders(orderDataSource: OrderDataSource) {
+        const orderGateway = new OrderGateway(orderDataSource);
+        if (!orderGateway) {
+            throw new Error("Gateway Inválido");
+        }
+        const order = await OrderUseCase.getAllActiveOrders(orderGateway);
+        if(order)
+        {
+            return order;
+        }
+        return null;
     }
 }
