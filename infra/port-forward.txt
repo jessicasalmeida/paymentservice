@@ -1,0 +1,1 @@
+kubectl port-forward service/restaurante-api 8000:8000
