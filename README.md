@@ -2,13 +2,23 @@
 
 ## Preparando o ambiente
 
-### Opção 1 - Executando em ambiente docker
-- Passo 3: Build da Imagem da Aplicação: docker build -t fiap/restaurante .
-- Passo 4: Run Banco de Dados + Imagem Aplicação: docker-compose -f docker-compose.yml up -d
-- Passo 5: Collection disponivel na raiz da pasta do projeto "fiap_restaurante.postman_collection.json"
+### Opção - Executando em ambiente Kubernets
+- Passo 1: Executar o comando: minikube start
+- Passo 2: Executar o comando: kubectl apply -f configmap.yaml
+- Passo 3: Executar o comando: kubectl apply -f pv.yaml
+- Passo 5: Executar o comando: kubectl apply -f pvc.yaml
+- Passo 6: Executar o comando: kubectl apply -f depl-restaurante-db.yaml
+- Passo 7: Executar o comando: kubectl apply -f depl-restaurante-api.yaml
+- Passo 8: Executar o comando: kubectl apply -f metrics.yaml
+- Passo 9: Executar o comando: kubectl port-forward service/restaurante-api 8000:8000
+
+### Opção - Executando em ambiente docker
+- Passo 1: Build da Imagem da Aplicação: docker build -t fiap/restaurante .
+- Passo 2: Run Banco de Dados + Imagem Aplicação: docker-compose -f docker-compose.yml up -d
+- Passo 3: Collection disponivel na raiz da pasta do projeto "fiap_restaurante.postman_collection.json"
 > Aplicação disponivel na porta 5000, mongo-express 8081 e mongo 27017
 
-### Opção 2 - Executando em ambiente local
+### Opção - Executando em ambiente local
 - Passo 1: Instalação dependencias: npm install
 - Passo 2: Build da Aplicação: npm run build
 - Passo 3: Altere o arquivo .env a variavel DB_CONN_STRING para "mongodb://root:MongoDB2019!@localhost:27017/"
