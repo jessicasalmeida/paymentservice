@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurante-api
+  labels:
+    app: restaurante-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: restaurante-api
+  template:
+    metadata:
+      labels:
+        app: restaurante-api
+    spec:
+      containers:
+        - name: restaurante-api
+          image: jessicasalmeida/restaurante:1.0.0
+          ports: 
+            - containerPort: 5000
+          # ReadinessProbe
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          # LivenessProbe)
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 30
+            periodSeconds: 60
