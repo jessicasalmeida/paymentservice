@@ -24,7 +24,7 @@ spec:
             limits: 
               memory: "128Mi"
               cpu: "500m"
-          image: jessicasalmeida/restaurante:1.0.0
+          image: jessicasalmeida/restaurante:2.0.0
           ports: 
             - containerPort: 5000
           env:
