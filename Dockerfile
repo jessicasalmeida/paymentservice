@@ -7,12 +7,12 @@ COPY package*.json /usr/src/app/
 
 RUN npm install
 
-ENV DB_CONN_STRING="uri"
-ENV DB_NAME="db"
-ENV CART_COLLECTION_NAME="collection"
-ENV ORDER_COLLECTION_NAME="collection"
-ENV PRODUCT_COLLECTION_NAME="collection"
-ENV USER_COLLECTION_NAME="collection"
+ENV DB_CONN_STRING="mongodb://root:MongoDB2019!@mongo:27017/"
+ENV DB_NAME="restaurante_db"
+ENV CART_COLLECTION_NAME="cart"
+ENV ORDER_COLLECTION_NAME="order"
+ENV PRODUCT_COLLECTION_NAME="produtos"
+ENV USER_COLLECTION_NAME="user"
 
 COPY ./dist/ /usr/src/app/dist
 COPY .env /usr/src/app
