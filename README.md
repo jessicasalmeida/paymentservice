@@ -13,7 +13,7 @@
 - Passo 9: Executar o comando: kubectl port-forward service/restaurante-api 8000:8000
 
 ### Opção - Executando em ambiente docker
-- Passo 1: Build da Imagem da Aplicação: docker build -t docker build -t jessicasalmeida/restaurante:{version} .
+- Passo 1: Build da Imagem da Aplicação: docker build -t jessicasalmeida/restaurante:{version} .
 - Passo 2: Run Banco de Dados + Imagem Aplicação: docker-compose -f docker-compose.yml up -d
 - Passo 3: Collection disponivel na raiz da pasta do projeto "fiap_restaurante.postman_collection.json"
 > Aplicação disponivel na porta 5000, mongo-express 8081 e mongo 27017
