@@ -34,6 +34,7 @@
 
 ## Swagger
 - Link: /api-docs/
+- Atualizar Swagger: cmd ts-node src/swagger.ts
 
 
 # Dados das APIs

@@ -13,6 +13,7 @@ ENV CART_COLLECTION_NAME="cart"
 ENV ORDER_COLLECTION_NAME="order"
 ENV PRODUCT_COLLECTION_NAME="produtos"
 ENV USER_COLLECTION_NAME="user"
+ENV URL="http://localhost:8000"
 
 COPY ./dist/ /usr/src/app/dist
 COPY .env /usr/src/app
