@@ -83,3 +83,13 @@ spec:
     - protocol: TCP
       port: 8000      # tem
       targetPort: 8000
+---
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: restaurante-tgb
+spec:
+  serviceRef:
+    name: restaurante-api
+    port: 8000
+  targetGroupARN: arn:aws:elasticloadbalancing:us-east-1:094091489187:loadbalancer/app/restaurante-eks-lb/121841af49feca29
