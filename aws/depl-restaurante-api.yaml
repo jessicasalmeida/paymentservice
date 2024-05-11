@@ -20,11 +20,7 @@ spec:
     spec:
       containers:
         - name: restaurante-api
-          resources: 
-            limits: 
-              memory: "128Mi"
-              cpu: "300m"
-          image: jessicasalmeida/restaurante:latest
+          image: DOCKER_IMAGE
           imagePullPolicy: Always
 
           ports: 
@@ -72,7 +68,7 @@ spec:
                   name: db-config
                   key: URL
 
-            
+
 ---
 
 apiVersion: v1
@@ -82,28 +78,8 @@ metadata:
 spec:
   selector:
     app: restaurante-api
-  type: NodePort
+  type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 8000      # tem 
+      port: 8000      # tem
       targetPort: 8000
-
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
- name: restaurante-api
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: restaurante-api
-  minReplicas: 1
-  maxReplicas: 10
-  metrics:
-  - type: Resource  
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 10
