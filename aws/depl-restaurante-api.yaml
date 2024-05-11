@@ -78,7 +78,7 @@ metadata:
 spec:
   selector:
     app: restaurante-api
-  type: LoadBalancer
+  type: Node
   ports:
     - protocol: TCP
       port: 8000      # tem
