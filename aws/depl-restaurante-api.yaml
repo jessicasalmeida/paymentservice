@@ -78,7 +78,7 @@ spec:
   type: NodePort
   ports:
     - protocol: TCP
-      port: 8000      # tem
+      port: 8000
       targetPort: 8000
 ---
 
@@ -91,7 +91,7 @@ metadata:
     app: ingress
   annotations:
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/scheme: internet-facing
 spec:
   ingressClassName: alb
   rules:
