@@ -80,7 +80,7 @@ metadata:
 spec:
   selector:
     app: restaurante-api
-  type: LoadBalancer
+  type: NodePort
   ports:
     - protocol: TCP
       port: 8000      # tem
@@ -96,8 +96,6 @@ metadata:
     app: ingress
   annotations:
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-    alb.ingress.kubernetes.io/ssl-redirect: '8000'
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/scheme: internal
 spec:
