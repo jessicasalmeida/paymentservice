@@ -28,8 +28,6 @@ spec:
       containers:
         - name: restaurante-api
           image: DOCKER_IMAGE
-          imagePullPolicy: Always
-
           ports: 
             - containerPort: 8000
           env:
@@ -84,9 +82,12 @@ metadata:
   name: restaurante-api
   namespace: api
   annotations:
-    service.beta.kubernetes/io/cluster: restaurante-fiap
-    service.beta.kubernetes/io/role/internal-elb: 1
-    service.beta.kubernetes.io/ingress.class: alb
+    service.beta.kubernetes.io/aws-load-balancer-name: "restaurante-lb"
+    service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: *
+    service.beta.kubernetes.io/aws-load-balancer-type: "instance"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internal"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "instance"
+    service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: proxy_protocol_v2.enabled=true
 spec:
   selector:
     app: restaurante-api
@@ -106,10 +107,12 @@ metadata:
   labels:
     app: ingress
   annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/load-balancer-name: ingress
+    alb.ingress.kubernetes.io/listen-ports: [{"HTTP": 80}]
+    alb.ingress.kubernetes.io/ssl-redirect: '8000'
     alb.ingress.kubernetes.io/target-type: instance
+    alb.ingress.kubernetes.io/scheme: internal
 spec:
-  ingressClassName: alb
   rules:
     - http:
         paths:
