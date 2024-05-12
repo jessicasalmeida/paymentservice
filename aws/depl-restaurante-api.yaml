@@ -84,10 +84,9 @@ metadata:
   name: restaurante-api
   namespace: api
   annotations:
-    kubernetes/io/cluster:restaurante-fiap
-    kubernetes/io/role/internal-elb: 1
-    kubernetes.io/ingress.class: alb
-
+    service.beta.kubernetes/io/cluster: restaurante-fiap
+    service.beta.kubernetes/io/role/internal-elb: 1
+    service.beta.kubernetes.io/ingress.class: alb
 spec:
   selector:
     app: restaurante-api
