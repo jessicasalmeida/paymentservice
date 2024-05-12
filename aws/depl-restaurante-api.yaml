@@ -1,4 +1,10 @@
 # https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: api
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -110,3 +116,13 @@ spec:
                 name: restaurante-api
                 port:
                   number: 8000
+---
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: restaurante-tgb
+spec:
+  serviceRef:
+    name: restaurante-api
+    port: 8000
+  targetGroupARN: arn:aws:elasticloadbalancing:us-east-1:094091489187:targetgroup/teste/6dfc85507c901d88
