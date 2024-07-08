@@ -1,6 +1,4 @@
 import { OrderUseCase } from "../../core/usercases/order-use-case";
-import { CartDataSource } from '../../common/interfaces/cart-data-source';
-import { CartGateway } from '../gateways/cart';
 import { OrderGateway } from '../gateways/order';
 import { OrderDataSource } from '../../common/interfaces/order-data-source';
 import { OrderPresenter } from "../presenters/order";
@@ -9,13 +7,12 @@ export class OrderController {
     constructor(private readonly orderUseCase: OrderUseCase) {
     }
 
-    static async receiveOrder(id: string, orderDataSource: OrderDataSource, cartDataSource: CartDataSource) {
+    static async receiveOrder(id: string, orderDataSource: OrderDataSource) {
         const orderGateway = new OrderGateway(orderDataSource);
-        const cartGateway = new CartGateway(cartDataSource);
-        if (!orderGateway || !cartGateway) {
+        if (!orderGateway) {
             throw new Error("Gateway Inválido");
         }
-        const order = await OrderUseCase.receiveOrder(id, orderGateway, cartGateway);
+        const order = await OrderUseCase.receiveOrder(id, orderGateway);
         if(order)
         {
             return OrderPresenter.toDTO(order);

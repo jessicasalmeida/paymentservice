@@ -42,14 +42,8 @@ function connectToDataBase() {
         const client = new mongoDB.MongoClient(process.env.DB_CONN_STRING);
         yield client.connect();
         const db = client.db(process.env.DB_NAME);
-        const cartCollection = db.collection(process.env.CART_COLLECTION_NAME);
         const orderCollection = db.collection(process.env.ORDER_COLLECTION_NAME);
-        const productCollection = db.collection(process.env.PRODUCT_COLLECTION_NAME);
-        const userCollection = db.collection(process.env.USER_COLLECTION_NAME);
-        exports.collections.carts = cartCollection;
         exports.collections.orders = orderCollection;
-        exports.collections.product = productCollection;
-        exports.collections.user = userCollection;
         console.log(`Conexão :` + process.env.DB_CONN_STRING);
     });
 }

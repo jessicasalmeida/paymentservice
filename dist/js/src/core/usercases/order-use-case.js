@@ -13,16 +13,16 @@ exports.OrderUseCase = void 0;
 const order_1 = require("../entities/order");
 const generators_1 = require("../../common/helpers/generators");
 class OrderUseCase {
-    static receiveOrder(idCart, orderGateway, cartGateway) {
+    static receiveOrder(idCart, orderGateway) {
         return __awaiter(this, void 0, void 0, function* () {
             const status = "RECEIVED";
-            let estimatedDelivery = yield OrderUseCase.estimatedDelivery(idCart, cartGateway);
+            let estimatedDelivery = yield OrderUseCase.estimatedDelivery(idCart);
             const ordersReceived = (yield OrderUseCase.getAllActiveOrders(orderGateway));
             if (ordersReceived) {
                 ordersReceived.filter(value => (value.status == "RECEIVED" || value.status == "PREPARING")
                     && Date.now().valueOf() >= value.receiveDate.valueOf());
                 for (const value of ordersReceived) {
-                    estimatedDelivery += yield OrderUseCase.estimatedDelivery(value.idCart, cartGateway);
+                    estimatedDelivery += yield OrderUseCase.estimatedDelivery(value.idCart);
                 }
             }
             const novoId = (0, generators_1.generateRandomString)();
@@ -119,7 +119,7 @@ class OrderUseCase {
             }
         });
     }
-    static estimatedDelivery(idCart, cartGateway) {
+    static estimatedDelivery(idCart) {
         return __awaiter(this, void 0, void 0, function* () {
             const cart = Object.assign({}, yield cartGateway.getOne(idCart));
             return cart.products.reduce((sum, p) => sum + p.timeToPrepare, 0);

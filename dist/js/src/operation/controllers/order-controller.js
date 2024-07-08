@@ -11,21 +11,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderController = void 0;
 const order_use_case_1 = require("../../core/usercases/order-use-case");
-const cart_1 = require("../gateways/cart");
 const order_1 = require("../gateways/order");
 const order_2 = require("../presenters/order");
 class OrderController {
     constructor(orderUseCase) {
         this.orderUseCase = orderUseCase;
     }
-    static receiveOrder(id, orderDataSource, cartDataSource) {
+    static receiveOrder(id, orderDataSource) {
         return __awaiter(this, void 0, void 0, function* () {
             const orderGateway = new order_1.OrderGateway(orderDataSource);
-            const cartGateway = new cart_1.CartGateway(cartDataSource);
-            if (!orderGateway || !cartGateway) {
+            if (!orderGateway) {
                 throw new Error("Gateway Inválido");
             }
-            const order = yield order_use_case_1.OrderUseCase.receiveOrder(id, orderGateway, cartGateway);
+            const order = yield order_use_case_1.OrderUseCase.receiveOrder(id, orderGateway);
             if (order) {
                 return order_2.OrderPresenter.toDTO(order);
             }

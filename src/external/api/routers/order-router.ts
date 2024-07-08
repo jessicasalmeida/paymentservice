@@ -1,9 +1,7 @@
 import express, { Router } from "express";
-import { CartRepositoryMongoBd } from "../../data-sources/mongodb/cart-repository-mongo-bd";
 import { OrderRepositoryMongoBd } from "../../data-sources/mongodb/order-repository-mongo-bd";
 import { OrderController } from "../../../operation/controllers/order-controller";
 
-const cartRepository = new CartRepositoryMongoBd();
 const orderRepository = new OrderRepositoryMongoBd();
 
 export const orderRouter = Router();
@@ -15,7 +13,7 @@ orderRouter.post('/receive/:id', async (req, res) => {
         #swagger.summary = 'Receive'
         #swagger.description = 'Endpoint to receive a order' */
     const id = req.params.id;
-    const order = await OrderController.receiveOrder(id, orderRepository, cartRepository);
+    const order = await OrderController.receiveOrder(id, orderRepository);
     res.status(200).json(order);
 });
 

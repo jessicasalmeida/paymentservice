@@ -1,20 +1,19 @@
 import { OrderGateway } from "../../operation/gateways/order";
 import { OrderEntity } from "../entities/order";
-import { CartGateway } from '../../operation/gateways/cart';
 import { generateRandomString } from "../../common/helpers/generators";
 
 export class OrderUseCase {
 
-    static async receiveOrder(idCart: string, orderGateway: OrderGateway, cartGateway:CartGateway): Promise<OrderEntity| null> {
+    static async receiveOrder(idCart: string, orderGateway: OrderGateway): Promise<OrderEntity| null> {
         const status = "RECEIVED";
-        let estimatedDelivery: number = await OrderUseCase.estimatedDelivery(idCart, cartGateway);
+        let estimatedDelivery: number = await OrderUseCase.estimatedDelivery(idCart);
         const ordersReceived = (await OrderUseCase.getAllActiveOrders(orderGateway));
         if (ordersReceived) {
             ordersReceived.filter(value =>
                 (value.status == "RECEIVED" || value.status == "PREPARING")
                 && Date.now().valueOf() >= value.receiveDate.valueOf());
             for (const value of ordersReceived) {
-                estimatedDelivery += await OrderUseCase.estimatedDelivery(value.idCart, cartGateway);
+                estimatedDelivery += await OrderUseCase.estimatedDelivery(value.idCart);
             }
         }
         const novoId = generateRandomString();
@@ -112,8 +111,7 @@ export class OrderUseCase {
 
     }
 
-    private static async estimatedDelivery(idCart: string, cartGateway: CartGateway): Promise<number> {
-        const cart = Object.assign({}, await cartGateway.getOne(idCart));
-        return cart.products.reduce((sum: any, p: { timeToPrepare: any; }) => sum + p.timeToPrepare, 0);
+    private static async estimatedDelivery(idCart: string): Promise<number> {
+        return order.cart.products.reduce((sum: any, p: { timeToPrepare: any; }) => sum + p.timeToPrepare, 0);
     }
 }

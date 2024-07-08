@@ -1,4 +1,3 @@
-import {ObjectId} from "mongodb";
 import {collections} from "./db-connect";
 import { OrderDataSource } from "../../../common/interfaces/order-data-source";
 import { OrderDTO } from "../../../common/dtos/order.dto";

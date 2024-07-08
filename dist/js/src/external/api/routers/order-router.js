@@ -34,10 +34,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderRouter = void 0;
 const express_1 = __importStar(require("express"));
-const cart_repository_mongo_bd_1 = require("../../data-sources/mongodb/cart-repository-mongo-bd");
 const order_repository_mongo_bd_1 = require("../../data-sources/mongodb/order-repository-mongo-bd");
 const order_controller_1 = require("../../../operation/controllers/order-controller");
-const cartRepository = new cart_repository_mongo_bd_1.CartRepositoryMongoBd();
 const orderRepository = new order_repository_mongo_bd_1.OrderRepositoryMongoBd();
 exports.orderRouter = (0, express_1.Router)();
 exports.orderRouter.use(express_1.default.json());
@@ -46,7 +44,7 @@ exports.orderRouter.post('/receive/:id', (req, res) => __awaiter(void 0, void 0,
         #swagger.summary = 'Receive'
         #swagger.description = 'Endpoint to receive a order' */
     const id = req.params.id;
-    const order = yield order_controller_1.OrderController.receiveOrder(id, orderRepository, cartRepository);
+    const order = yield order_controller_1.OrderController.receiveOrder(id, orderRepository);
     res.status(200).json(order);
 }));
 exports.orderRouter.post('/prepare/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
