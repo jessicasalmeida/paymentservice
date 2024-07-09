@@ -2,17 +2,18 @@ import { OrderUseCase } from "../../core/usercases/order-use-case";
 import { OrderGateway } from '../gateways/order';
 import { OrderDataSource } from '../../common/interfaces/order-data-source';
 import { OrderPresenter } from "../presenters/order";
+import { NewOrderDTO } from "../../common/dtos/order.dto";
 
 export class OrderController {
     constructor(private readonly orderUseCase: OrderUseCase) {
     }
 
-    static async receiveOrder(id: string, orderDataSource: OrderDataSource) {
+    static async receiveOrder(newOrder: NewOrderDTO, orderDataSource: OrderDataSource) {
         const orderGateway = new OrderGateway(orderDataSource);
         if (!orderGateway) {
             throw new Error("Gateway Inválido");
         }
-        const order = await OrderUseCase.receiveOrder(id, orderGateway);
+        const order = await OrderUseCase.receiveOrder(newOrder, orderGateway);
         if(order)
         {
             return OrderPresenter.toDTO(order);

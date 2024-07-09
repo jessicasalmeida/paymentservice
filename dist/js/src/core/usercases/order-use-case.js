@@ -13,20 +13,24 @@ exports.OrderUseCase = void 0;
 const order_1 = require("../entities/order");
 const generators_1 = require("../../common/helpers/generators");
 class OrderUseCase {
-    static receiveOrder(idCart, orderGateway) {
+    static receiveOrder(newOrder, orderGateway) {
         return __awaiter(this, void 0, void 0, function* () {
             const status = "RECEIVED";
-            let estimatedDelivery = yield OrderUseCase.estimatedDelivery(idCart);
+            let estimatedDelivery = newOrder.cart.estimatedTime; // convertToJson get cart.timetoprepare
             const ordersReceived = (yield OrderUseCase.getAllActiveOrders(orderGateway));
             if (ordersReceived) {
-                ordersReceived.filter(value => (value.status == "RECEIVED" || value.status == "PREPARING")
+                let idsOrders = [];
+                const ordersQueue = ordersReceived.filter(value => (value.status == "RECEIVED" || value.status == "PREPARING")
                     && Date.now().valueOf() >= value.receiveDate.valueOf());
                 for (const value of ordersReceived) {
-                    estimatedDelivery += yield OrderUseCase.estimatedDelivery(value.idCart);
+                    idsOrders.push(Number(value.id));
                 }
+                let maxId = Math.max(...idsOrders);
+                const order = ordersReceived.filter(o => o.id === String(maxId));
+                estimatedDelivery += order[0].deliveryTime;
             }
             const novoId = (0, generators_1.generateRandomString)();
-            const order = new order_1.OrderEntity(novoId, idCart, new Date(), estimatedDelivery, status);
+            const order = new order_1.OrderEntity(novoId, new Date(), estimatedDelivery, status, newOrder.cart);
             const nOrder = orderGateway.create(order);
             if (nOrder) {
                 return nOrder;
@@ -117,12 +121,6 @@ class OrderUseCase {
             else {
                 return null;
             }
-        });
-    }
-    static estimatedDelivery(idCart) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const cart = Object.assign({}, yield cartGateway.getOne(idCart));
-            return cart.products.reduce((sum, p) => sum + p.timeToPrepare, 0);
         });
     }
 }

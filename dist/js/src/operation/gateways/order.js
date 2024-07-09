@@ -19,10 +19,10 @@ class OrderGateway {
         return __awaiter(this, void 0, void 0, function* () {
             const orderDTO = {
                 id: order.id,
-                idCart: order.idCart,
                 receiveDate: order.receiveDate,
                 deliveryTime: order.deliveryTime,
-                status: order.status
+                status: order.status,
+                cart: order.cart
             };
             const sucesso = yield this.orderDataSource.create(orderDTO);
             return sucesso;
@@ -32,7 +32,7 @@ class OrderGateway {
         return __awaiter(this, void 0, void 0, function* () {
             const data = yield this.orderDataSource.findOne(id);
             if (data) {
-                const dataEntity = new order_1.OrderEntity((id = data.id), data.idCart, data.receiveDate, data.deliveryTime, data.status);
+                const dataEntity = new order_1.OrderEntity((id = data.id), data.receiveDate, data.deliveryTime, data.status, data.cart);
                 return dataEntity;
             }
             return null;
@@ -42,14 +42,14 @@ class OrderGateway {
         return __awaiter(this, void 0, void 0, function* () {
             const orderDTO = {
                 id: order.id,
-                idCart: order.idCart,
                 receiveDate: order.receiveDate,
                 deliveryTime: order.deliveryTime,
-                status: order.status
+                status: order.status,
+                cart: order.cart
             };
             const data = yield this.orderDataSource.update(id, orderDTO);
             if (data) {
-                const dataEntity = new order_1.OrderEntity((id = data.id), data.idCart, data.receiveDate, data.deliveryTime, data.status);
+                const dataEntity = new order_1.OrderEntity((id = data.id), data.receiveDate, data.deliveryTime, data.status, data.cart);
                 return dataEntity;
             }
             return null;
@@ -61,7 +61,7 @@ class OrderGateway {
             if (data) {
                 var dataEntity = new Array();
                 data.forEach(data => {
-                    dataEntity.push(new order_1.OrderEntity(data.id, data.idCart, data.receiveDate, data.deliveryTime, data.status));
+                    dataEntity.push(new order_1.OrderEntity(data.id, data.receiveDate, data.deliveryTime, data.status, data.cart));
                 });
                 return dataEntity;
             }

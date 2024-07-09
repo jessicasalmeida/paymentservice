@@ -1,11 +1,10 @@
-import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "../public/swagger.json";
 import app from "./server";
 import { routes } from "./external/api/routers";
 import { connectToDataBase } from "./external/data-sources/mongodb/db-connect";
 
-const port = 8000;
+const port = 5000;
 connectToDataBase()
     .then(()=> {
         app.use('/', routes);

@@ -39,12 +39,12 @@ const order_controller_1 = require("../../../operation/controllers/order-control
 const orderRepository = new order_repository_mongo_bd_1.OrderRepositoryMongoBd();
 exports.orderRouter = (0, express_1.Router)();
 exports.orderRouter.use(express_1.default.json());
-exports.orderRouter.post('/receive/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.orderRouter.post('/receive/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     /*  #swagger.tags = ['Order']
         #swagger.summary = 'Receive'
         #swagger.description = 'Endpoint to receive a order' */
-    const id = req.params.id;
-    const order = yield order_controller_1.OrderController.receiveOrder(id, orderRepository);
+    const newOrder = req.body;
+    const order = yield order_controller_1.OrderController.receiveOrder(newOrder, orderRepository);
     res.status(200).json(order);
 }));
 exports.orderRouter.post('/prepare/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

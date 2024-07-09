@@ -1,36 +1,41 @@
 import { OrderGateway } from "../../operation/gateways/order";
 import { OrderEntity } from "../entities/order";
 import { generateRandomString } from "../../common/helpers/generators";
+import { NewOrderDTO } from "../../common/dtos/order.dto";
 
 export class OrderUseCase {
 
-    static async receiveOrder(idCart: string, orderGateway: OrderGateway): Promise<OrderEntity| null> {
+    static async receiveOrder(newOrder: NewOrderDTO, orderGateway: OrderGateway): Promise<OrderEntity | null> {
         const status = "RECEIVED";
-        let estimatedDelivery: number = await OrderUseCase.estimatedDelivery(idCart);
+        let estimatedDelivery: number = newOrder.cart.estimatedTime;
         const ordersReceived = (await OrderUseCase.getAllActiveOrders(orderGateway));
-        if (ordersReceived) {
-            ordersReceived.filter(value =>
+        if (ordersReceived!.length>0) {
+            let idsOrders = [] as number[];
+            const ordersQueue = ordersReceived!.filter(value =>
                 (value.status == "RECEIVED" || value.status == "PREPARING")
-                && Date.now().valueOf() >= value.receiveDate.valueOf());
-            for (const value of ordersReceived) {
-                estimatedDelivery += await OrderUseCase.estimatedDelivery(value.idCart);
+                && Date.now().valueOf() >= value.receiveDate.valueOf())
+            for (const value of ordersQueue) {
+                idsOrders.push(Number(value.id));
             }
+            let maxId = Math.max(...idsOrders);
+            const order = ordersReceived!.filter(o => o.id === String(maxId));
+            estimatedDelivery += order[0].deliveryTime;            
         }
+
         const novoId = generateRandomString();
 
         const order = new OrderEntity(
             novoId,
-            idCart,
             new Date(),
             estimatedDelivery,
-            status
+            status,
+            newOrder.cart
         );
         const nOrder = orderGateway.create(order);
-        if(nOrder)
-        {
+        if (nOrder) {
             return nOrder;
         }
-        else{
+        else {
             return null;
         }
     }
@@ -109,9 +114,5 @@ export class OrderUseCase {
             return null;
         }
 
-    }
-
-    private static async estimatedDelivery(idCart: string): Promise<number> {
-        return order.cart.products.reduce((sum: any, p: { timeToPrepare: any; }) => sum + p.timeToPrepare, 0);
     }
 }

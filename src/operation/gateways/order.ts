@@ -13,10 +13,10 @@ export class OrderGateway {
         const orderDTO: OrderDTO =
         {
             id: order.id,
-            idCart: order.idCart,
             receiveDate: order.receiveDate,
             deliveryTime: order.deliveryTime,
-            status: order.status
+            status: order.status,
+            cart: order.cart
         };
 
         const sucesso = await this.orderDataSource.create(orderDTO);
@@ -27,7 +27,7 @@ export class OrderGateway {
         const data = await this.orderDataSource.findOne(id);
         if (data) {
             const dataEntity = new OrderEntity(
-                (id = data.id), data.idCart, data.receiveDate, data.deliveryTime, data.status);
+                (id = data.id), data.receiveDate, data.deliveryTime, data.status, data.cart);
             return dataEntity;
         }
         return null;
@@ -37,17 +37,17 @@ export class OrderGateway {
         const orderDTO: OrderDTO =
         {
             id: order.id,
-            idCart: order.idCart,
             receiveDate: order.receiveDate,
             deliveryTime: order.deliveryTime,
-            status: order.status
+            status: order.status,
+            cart: order.cart
         };
 
         const data = await this.orderDataSource.update(id, orderDTO);
         if (data) {
             const dataEntity = new OrderEntity(
-                (id = data.id), data.idCart, data.receiveDate, data.deliveryTime, data.status);
-             return dataEntity;
+                (id = data.id), data.receiveDate, data.deliveryTime, data.status, data.cart);
+            return dataEntity;
         }
         return null;
     }
@@ -59,8 +59,8 @@ export class OrderGateway {
             var dataEntity: Array<OrderEntity> = new Array();
             data.forEach(data => {
                 dataEntity.push(new OrderEntity(
-                    data.id, data.idCart, data.receiveDate, data.deliveryTime, data.status));
-             });
+                    data.id, data.receiveDate, data.deliveryTime, data.status, data.cart));
+            });
 
             return dataEntity;
         }

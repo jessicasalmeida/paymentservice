@@ -1,21 +1,21 @@
 export class OrderEntity {
     id: string;
-    idCart: string;
     receiveDate: Date;
     deliveryTime: number;
     status: string;
+    cart: Object;
 
     constructor(
         id: string,
-        idCart: string,
         receiveDate: Date,
         deliveryTime: number,
         status: string,
+        cart: Object
     ) {
         this.id = id;
-        this.idCart = idCart;
         this.receiveDate = receiveDate;
         this.deliveryTime = deliveryTime;
         this.status = status;
+        this.cart = cart;
     }
 }

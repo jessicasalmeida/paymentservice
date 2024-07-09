@@ -8,12 +8,12 @@ export const orderRouter = Router();
 
 orderRouter.use(express.json());
 
-orderRouter.post('/receive/:id', async (req, res) => {
+orderRouter.post('/receive/', async (req, res) => {
     /*  #swagger.tags = ['Order']
         #swagger.summary = 'Receive'
         #swagger.description = 'Endpoint to receive a order' */
-    const id = req.params.id;
-    const order = await OrderController.receiveOrder(id, orderRepository);
+    const newOrder = req.body;
+    const order = await OrderController.receiveOrder(newOrder, orderRepository);
     res.status(200).json(order);
 });
 

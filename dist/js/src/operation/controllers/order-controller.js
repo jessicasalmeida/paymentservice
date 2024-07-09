@@ -17,13 +17,13 @@ class OrderController {
     constructor(orderUseCase) {
         this.orderUseCase = orderUseCase;
     }
-    static receiveOrder(id, orderDataSource) {
+    static receiveOrder(newOrder, orderDataSource) {
         return __awaiter(this, void 0, void 0, function* () {
             const orderGateway = new order_1.OrderGateway(orderDataSource);
             if (!orderGateway) {
                 throw new Error("Gateway Inválido");
             }
-            const order = yield order_use_case_1.OrderUseCase.receiveOrder(id, orderGateway);
+            const order = yield order_use_case_1.OrderUseCase.receiveOrder(newOrder, orderGateway);
             if (order) {
                 return order_2.OrderPresenter.toDTO(order);
             }

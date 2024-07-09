@@ -7,10 +7,10 @@ export class OrderPresenter {
     ): OrderDTO {
         let dto: OrderDTO = {
             id: order.id,
-            idCart: order.idCart,
             receiveDate: order.receiveDate,
             deliveryTime: order.deliveryTime,
-            status: order.status
+            status: order.status,
+            cart: order.cart
         };
         return dto;
     }
