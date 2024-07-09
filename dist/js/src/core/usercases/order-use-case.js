@@ -16,13 +16,13 @@ class OrderUseCase {
     static receiveOrder(newOrder, orderGateway) {
         return __awaiter(this, void 0, void 0, function* () {
             const status = "RECEIVED";
-            let estimatedDelivery = newOrder.cart.estimatedTime; // convertToJson get cart.timetoprepare
+            let estimatedDelivery = newOrder.cart.estimatedTime;
             const ordersReceived = (yield OrderUseCase.getAllActiveOrders(orderGateway));
-            if (ordersReceived) {
+            if (ordersReceived.length > 0) {
                 let idsOrders = [];
                 const ordersQueue = ordersReceived.filter(value => (value.status == "RECEIVED" || value.status == "PREPARING")
                     && Date.now().valueOf() >= value.receiveDate.valueOf());
-                for (const value of ordersReceived) {
+                for (const value of ordersQueue) {
                     idsOrders.push(Number(value.id));
                 }
                 let maxId = Math.max(...idsOrders);
