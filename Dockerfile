@@ -15,6 +15,6 @@ ENV URL="http://localhost:8000"
 COPY ./dist/ /usr/src/app/dist
 COPY .env /usr/src/app
 
-EXPOSE 8000
+EXPOSE 5000
 
 CMD ["npm", "start"]
