@@ -22,11 +22,10 @@ class OrderUseCase {
                 let idsOrders = [];
                 const ordersQueue = ordersReceived.filter(value => (value.status == "RECEIVED" || value.status == "PREPARING")
                     && Date.now().valueOf() >= value.receiveDate.valueOf());
-                for (const value of ordersQueue) {
-                    idsOrders.push(Number(value.id));
-                }
-                let maxId = Math.max(...idsOrders);
-                const order = ordersReceived.filter(o => o.id === String(maxId));
+                let lastIItem = ordersQueue.reduce((latest, current) => {
+                    return current.receiveDate > latest.receiveDate ? current : latest;
+                }, ordersQueue[0]);
+                const order = ordersReceived.filter(o => o.id === lastIItem.id);
                 estimatedDelivery += order[0].deliveryTime;
             }
             const novoId = (0, generators_1.generateRandomString)();
