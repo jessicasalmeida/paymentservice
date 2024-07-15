@@ -81,7 +81,7 @@ export class OrderUseCase {
             return OrderUseCase.sendNotificationDelivery(idOrder, orderGateway);
         }
         else {
-            return "Ordem não encontrada";
+            return "Order não encontrada";
         }
     }
 

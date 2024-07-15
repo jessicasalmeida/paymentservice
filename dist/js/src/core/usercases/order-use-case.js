@@ -77,7 +77,7 @@ class OrderUseCase {
     static updateStatusToReady(idOrder, orderGateway) {
         return __awaiter(this, void 0, void 0, function* () {
             const order = yield orderGateway.findOne(idOrder);
-            if (order) {
+            if (order != null) {
                 order.status = "READY";
                 yield orderGateway.update(idOrder, order);
                 return OrderUseCase.sendNotificationDelivery(idOrder, orderGateway);
