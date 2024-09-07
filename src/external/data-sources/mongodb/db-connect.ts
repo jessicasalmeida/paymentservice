@@ -1,9 +1,9 @@
 import * as mongoDB from "mongodb";
 import * as dotenv from "dotenv";
-import { OrderDTO } from '../../../common/dtos/order.dto';
+import { PagamentoDTO } from '../../../common/dtos/pagamento.dto';
 
 export const collections : {
-    orders?: mongoDB.Collection<OrderDTO>} = {};
+    pagamento?: mongoDB.Collection<PagamentoDTO>} = {};
 
 export async function connectToDataBase()
 {
@@ -11,9 +11,9 @@ export async function connectToDataBase()
     const client = new mongoDB.MongoClient(process.env.DB_CONN_STRING as string);
     await client.connect();
     const db = client.db(process.env.DB_NAME);
-    const orderCollection = db.collection<OrderDTO>(process.env.ORDER_COLLECTION_NAME as string);
+    const pagamentoCollection = db.collection<PagamentoDTO>(process.env.PAYMENT_COLLECTION_NAME as string);
 
-    collections.orders = orderCollection;
+    collections.pagamento = pagamentoCollection;
 
     console.log(`Conexão :` + process.env.DB_CONN_STRING as string);
 }

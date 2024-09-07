@@ -32,19 +32,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectToDataBase = exports.collections = void 0;
-const mongoDB = __importStar(require("mongodb"));
-const dotenv = __importStar(require("dotenv"));
-exports.collections = {};
-function connectToDataBase() {
-    return __awaiter(this, void 0, void 0, function* () {
-        dotenv.config();
-        const client = new mongoDB.MongoClient(process.env.DB_CONN_STRING);
-        yield client.connect();
-        const db = client.db(process.env.DB_NAME);
-        const pagamentoCollection = db.collection(process.env.ORDER_COLLECTION_NAME);
-        exports.collections.pagamento = pagamentoCollection;
-        console.log(`Conexão :` + process.env.DB_CONN_STRING);
-    });
-}
-exports.connectToDataBase = connectToDataBase;
+exports.paymentOrder = void 0;
+const express_1 = __importStar(require("express"));
+const pagamento_repository_mongo_bd_1 = require("../../data-sources/mongodb/pagamento-repository-mongo-bd");
+const pagamento_controller_1 = require("../../../operation/controllers/pagamento-controller");
+const orderRepository = new pagamento_repository_mongo_bd_1.PagamentoRepositoryMongoBd();
+const pagamentoController = new pagamento_controller_1.PagamentoController(orderRepository);
+exports.paymentOrder = (0, express_1.Router)();
+exports.paymentOrder.use(express_1.default.json());
+exports.paymentOrder.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Order']
+        #swagger.summary = 'Receive'
+        #swagger.description = 'Endpoint to receive a order' */
+    const newOrder = req.body;
+    const order = yield pagamento_controller_1.PagamentoController.newPagamento(newOrder, orderRepository);
+    res.status(200).json(order);
+}));
+exports.paymentOrder.post('/payed/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /*  #swagger.tags = ['Order']
+    #swagger.summary = 'Close'
+    #swagger.description = 'Endpoint to update status to closed' */
+    const id = req.params.id;
+    const order = yield pagamento_controller_1.PagamentoController.updateStatusToPayed(id, orderRepository);
+    res.status(200).json(order);
+}));

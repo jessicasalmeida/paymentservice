@@ -1,15 +1,11 @@
-export type NewOrderDTO = {
-    receiveDate: Date;
-    deliveryTime: number;
-    status: string;
+export type NewPagamentoDTO = {
+    status: boolean;
     cart: CartItensDTO;
 }
 
-export type OrderDTO = {
+export type PagamentoDTO = {
     id: string;
-    receiveDate: Date;
-    deliveryTime: number;
-    status: string;
+    status: boolean;
     cart: object;
 }
 
@@ -45,4 +41,7 @@ export type UserDTO = {
     cpf: string;
     name: string;
     email: string;
+    cep: string;
+    telefone: string;
+
 }
