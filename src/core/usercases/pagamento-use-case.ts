@@ -27,6 +27,9 @@ export class PagamentoUseCase {
             return payment;
         }
         else {
+            await PagamentoUseCase.mq.connect();
+            await PagamentoUseCase.mq.publish('rollback_cart_paid', { payment: newPagamentoDTO });
+            await PagamentoUseCase.mq.close();
             return null;
         }
     }
@@ -36,6 +39,7 @@ export class PagamentoUseCase {
         await PagamentoUseCase.mq.connect();
         await PagamentoUseCase.mq.consume('new_payment',  async (message: any) => {
             const payment: NewPagamentoDTO = message.payment;
+            console.log("Fila new_payment. ID: " + payment.cart.id);
             PagamentoUseCase.newPagamento(payment, pagamentoGateway);
         });
     }

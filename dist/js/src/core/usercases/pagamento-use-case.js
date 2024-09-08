@@ -17,29 +17,17 @@ class PagamentoUseCase {
     constructor() {
         PagamentoUseCase.mq = new mq_1.RabbitMQ();
     }
-    static newPagamento(newPagamentoDTO, orderGateway) {
+    static newPagamento(newPagamentoDTO, paymentGateway) {
         return __awaiter(this, void 0, void 0, function* () {
-            const status = false;
+            const status = true;
             const novoId = (0, generators_1.generateRandomString)();
             const order = new pagamento_1.PagamentoEntity(novoId, status, newPagamentoDTO.cart);
-            const nOrder = orderGateway.create(order);
-            if (nOrder != null) {
-                return nOrder;
-            }
-            else {
-                return null;
-            }
-        });
-    }
-    static updateStatusToPayed(id, pagamentoGateway) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const pagamento = yield pagamentoGateway.findOne(id);
-            if (pagamento) {
-                pagamento.status = true;
+            const payment = paymentGateway.create(order);
+            if (payment != null && order.status) {
                 yield PagamentoUseCase.mq.connect();
-                yield PagamentoUseCase.mq.publish('cart_paid', { payment: pagamento });
+                yield PagamentoUseCase.mq.publish('cart_paid', { payment: newPagamentoDTO });
                 yield PagamentoUseCase.mq.close();
-                return pagamentoGateway.update(id, pagamento);
+                return payment;
             }
             else {
                 return null;
@@ -48,6 +36,7 @@ class PagamentoUseCase {
     }
     static listenForNewPayment(pagamentoGateway) {
         return __awaiter(this, void 0, void 0, function* () {
+            PagamentoUseCase.mq = new mq_1.RabbitMQ();
             yield PagamentoUseCase.mq.connect();
             yield PagamentoUseCase.mq.consume('new_payment', (message) => __awaiter(this, void 0, void 0, function* () {
                 const payment = message.payment;

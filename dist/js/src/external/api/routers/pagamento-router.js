@@ -48,11 +48,3 @@ exports.paymentOrder.post('/', (req, res) => __awaiter(void 0, void 0, void 0, f
     const order = yield pagamento_controller_1.PagamentoController.newPagamento(newOrder, orderRepository);
     res.status(200).json(order);
 }));
-exports.paymentOrder.post('/payed/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    /*  #swagger.tags = ['Order']
-    #swagger.summary = 'Close'
-    #swagger.description = 'Endpoint to update status to closed' */
-    const id = req.params.id;
-    const order = yield pagamento_controller_1.PagamentoController.updateStatusToPayed(id, orderRepository);
-    res.status(200).json(order);
-}));

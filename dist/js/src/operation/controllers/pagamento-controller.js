@@ -31,18 +31,5 @@ class PagamentoController {
             return null;
         });
     }
-    static updateStatusToPayed(id, pagamentoDataSource) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const orderGateway = new pagamento_1.PagamentoGateway(pagamentoDataSource);
-            if (!orderGateway) {
-                throw new Error("Gateway Inválido");
-            }
-            const order = yield pagamento_use_case_1.PagamentoUseCase.updateStatusToPayed(id, orderGateway);
-            if (order) {
-                return order;
-            }
-            return null;
-        });
-    }
 }
 exports.PagamentoController = PagamentoController;
